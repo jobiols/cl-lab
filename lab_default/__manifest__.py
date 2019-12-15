@@ -19,7 +19,7 @@
 # -----------------------------------------------------------------------------
 {
     'name': 'lab',
-    'version': '12.0.0.0.0',
+    'version': '12.0e.0.0.0',
     'license': 'Other OSI approved licence',
     'category': 'Default Application',
     'summary': 'Customization for lab',
@@ -29,12 +29,11 @@
         'sale_management',
         'account_invoicing',
         'purchase',
+        'stock',
 
         # minimum modules for argentinian localizacion + utilities + fixes
         # 'standard_depends',
-
-        # utilitarios adicionales
-        'backend_theme_v11',
+        'life'
     ],
     'data': [
     ],
@@ -45,17 +44,13 @@
     'auto_install': False,
     'images': [],
 
-    #
-    # Here begins docker-odoo-environment manifest
-    # --------------------------------------------
-
     # port where odoo starts serving pages
     'port': '8069',
-
-    # example repos version 1
     'repos': [
         {'usr': 'jobiols', 'repo': 'cl-lab', 'branch': '12.0'},
         {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
+        {'usr': 'ntsystemwork', 'repo': 'common-addons', 'branch': '12.0',
+         'ssh': True},
 
         {'usr': 'ingadhoc', 'repo': 'odoo-argentina', 'branch': '12.0'},
         {'usr': 'ingadhoc', 'repo': 'argentina-sale', 'branch': '12.0'},
