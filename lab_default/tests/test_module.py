@@ -15,11 +15,11 @@
 #
 #   Arrancar el test con:
 #
-#   oe -Q cash_flow -c digital -d digital_test
+#   oe -Q lab_default -c lab -d lab_test
 #
-from .common import CommonCase
+from odoo.tests.common import TransactionCase
 
 
-class TestController(CommonCase):
+class TestController(TransactionCase):
     def test_01(self):
         self.assertEquan(1, 1)
