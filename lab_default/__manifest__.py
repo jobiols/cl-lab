@@ -27,12 +27,15 @@
     'depends': [
         # basic applications
         'sale_management',
-        'account_invoicing',
         'purchase',
         'stock',
 
         # minimum modules for argentinian localizacion + utilities + fixes
-        # 'standard_depends',
+        'standard_depends_ee',
+
+        # utilitarios
+        'mail_tracking_mailgun',
+
         'life'
     ],
     'data': [
@@ -51,6 +54,8 @@
         {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
         {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0',
          'ssh': True, 'host': 'bitbucket.org'},
+
+        {'usr': 'jobiols', 'repo': 'odoo-etl', 'branch': '12.0'},
 
         {'usr': 'ingadhoc', 'repo': 'odoo-argentina', 'branch': '12.0'},
         {'usr': 'ingadhoc', 'repo': 'argentina-sale', 'branch': '12.0'},
