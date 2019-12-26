@@ -36,7 +36,7 @@
         # utilitarios
         'mail_tracking_mailgun',
 
-        #'life' para que ande travis
+        # 'life' comentamos para que ande travis, esta en privado
     ],
     'data': [
     ],
