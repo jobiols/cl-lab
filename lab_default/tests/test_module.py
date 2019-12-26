@@ -22,4 +22,4 @@ from odoo.tests.common import TransactionCase
 
 class TestController(TransactionCase):
     def test_01(self):
-        self.assertEquan(1, 1)
+        self.assertEqual(1, 1)
