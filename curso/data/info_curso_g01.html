@@ -1,0 +1,30 @@
+<p>Hola ${object.first_name} <br> Como estás?</p>
+
+<div align="center">
+    <img alt="megaoferta clases de automaquillaje de makeover"
+         src="http://makeoverlab.com.ar/wp-content/uploads/2018/05/automaquillaje-mayo18.jpg"
+         style="width: 398px; height: 421px;">
+</div>
+
+<br/>
+<div style="max-width:398px; margin:auto;">
+    <h2 style="box-sizing: border-box; margin: 0px 0px 4px;
+        text-align: justify; ">¿Cómo te inscribís?</h2>
+
+    <ul style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; text-align: justify;">
+        <li style="box-sizing: border-box;">Elegí el día para cursar.. contanos la fecha
+            y horario del curso que seleccionaste.</li>
+        <li style="box-sizing: border-box;">Envianos tus datos (Nombre y apellido,
+            DNI., casilla de mail, celular de contacto, fecha de nacimiento).</li>
+        <li style="box-sizing: border-box;">Adjuntá el comprobante de pago que acredita
+            la reserva de tu vacante.</li>
+    </ul>
+</div>
+
+<p>${object.info_curso_html('G01',discount=True) | safe}&nbsp;</p>
+
+<br>
+
+<div align="center">
+    ${object.get_mail_footer_html() | safe}
+</div>

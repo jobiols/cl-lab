@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- Lectures Form View -->
+
+        <record model="ir.ui.view" id="view_curso_lecture_form">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de clases">
+
+
+                    <group col="2">
+                        <group>
+                            <field name="assistance_id" nolabel="1">
+                                <tree string="planilla de asistencia"
+                                              font="bold"
+                                              colors="green:  state=='programmed';
+                                                      red:    state=='absent' and future == True;
+                                                      orange: state=='absent' and past == True;
+                                                      blue:   state=='present';
+                                                      brown:  state=='abandoned';" >
+                                    <button name="button_toggle_present" string="Dar el presente"
+                                            type="object" icon="gtk-apply"
+                                            attrs="{'invisible':[('present','=',True)]}"
+                                    />
+                                    <field name="partner_id"/>
+                                    <field name="present" string="Pre"/>
+                                    <field name="recover" string="Rec"/>
+                                    <field name="info"/>
+                                    <field name="state"/>
+                                    <field name="future" invisible="1"/>
+                                    <field name="past" invisible="1"/>
+                                    <button name="button_toggle_present" string="Volver a ausente"
+                                            type="object" icon="gtk-cancel"
+                                            attrs="{'invisible':[('present','=',False)]}"
+                                    />
+                                </tree>
+                            </field>
+                        </group>
+                        <group col="2">
+                            <group colspan="4">
+                                <h1>
+                                    <center>
+                                       <label for="seq" string="Clase"/>
+                                       <field name="seq" readonly="1"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group colspan="4">
+                                <h1>
+                                    <center>
+                                        <field name="weekday" readonly="1"/>
+                                        <field name="date" readonly="0"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group colspan = "4">
+                                <h1>
+                                    <center>
+                                        <field name="schedule_id" nolabel="0" readonly="1"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group col ="4">
+                                    <field name="reg_virtual" string="Total" readonly="1"/>
+                                    <field name="reg_vacancy" string="Vacantes" readonly="1"/>
+
+                                    <field name="reg_recover" string="Recuperan" readonly="1"/>
+                                    <field name="reg_absent"  string="Ausentes" readonly="1"/>
+                            </group>
+                        </group>
+                            <button name="button_generate_assistance"
+                                string="Generar asistencia" type="object" icon="gtk-apply"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Lectures Tree View -->
+
+        <record model="ir.ui.view" id="view_curso_lecture_tree">
+            <field name="name">Lectures</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <tree string="lista de clases">
+                    <field name="date"/>
+                    <field name="weekday" type="string"/>
+                    <field name="schedule_id"/>
+                    <field name="reg_current"/>
+                    <field name="reg_recover" string="Rec"/>
+                    <field name="reg_vacancy" string="Vac"/>
+                    <field name="seq" string="Clase"/>
+                    <field name="curso_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Lectures Search View -->
+
+        <record model="ir.ui.view" id="view_lecture_search">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <search string="Clases">
+                    <filter icon="terp-check" string="clases de hoy" name="today"
+                            domain="[('date','=',datetime.datetime.now().strftime('%%Y-%%m-%%d'))]"
+                            help="Clases de hoy"/>
+                    <field name="date"/>
+                    <field name="weekday"/>
+                    <field name="curso_id"/>
+                    <field name="schedule_id"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Curso" icon="terp-personal" context="{'group_by': 'curso_id'}"/>
+                        <filter string="Horario" icon="terp-stock_effects-object-colorize"
+                                context="{'group_by':'schedule_id'}"/>
+                        <filter string="Fecha de inicio" icon="terp-go-month" domain="[]"
+                                context="{'group_by':'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Lectures Calendar view -->
+
+        <record model="ir.ui.view" id="view_lecture_calendar">
+            <field name="name">curso.lecture.calendar</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <calendar color="curso_id" date_start="date_start" date_stop="date_stop"
+                          string="Inscripciones en los cursos">
+                    <field name="curso_id"/>
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Lectures Action View -->
+
+        <record model="ir.actions.act_window" id="action_curso_lecture">
+            <field name="name">Clases</field>
+            <field name="res_model">curso.lecture</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!-- Lectures Menu -->
+
+        <menuitem name="Clases"
+                  id="menu_curso_lecture" parent="base.menu_curso_main"
+                  action="action_curso_lecture" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+    </data>
+</openerp>

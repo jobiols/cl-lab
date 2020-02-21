@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+                id="action_curso_report_incoming"
+                model="curso.curso"
+                string="Cursos próximos a iniciar"
+                report_type="qweb-pdf"
+                attachment_use="False"
+                file="curso.curso_report_incoming"
+                name="curso.curso_report_incoming"
+        />
+
+        <report
+                id="attendance_report_id"
+                model="curso.curso"
+                string="Chequeo de datos"
+                report_type="qweb-pdf"
+                attachment_use="False"
+                name="curso.attendance_report"
+                file="curso.attendance_report"
+        />
+    </data>
+</openerp>

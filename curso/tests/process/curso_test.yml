@@ -1,0 +1,166 @@
+-
+    I create a Student
+-
+    !record {model: res.partner, id: curso_student_1}:
+        name: Juana Perez Alumna
+        customer: False
+-
+    I create a Teacher
+-
+    !record {model: res.partner, id: curso_teacher_1}:
+        name: Juana Molina Profesora
+        customer: False
+        teacher: True
+-
+    I create a product / 3 classes
+-
+    !record {model: product.product, id: curso_product_1}:
+        tot_hs_lecture: 15
+        hs_lecture: 5
+        no_quotes: 10
+        default_code: PSK
+        list_price: 800
+        type: service
+        name: Curso de maquillaje Social Profesional rafañuso
+        agenda: Titulo Cuerpo del texto **negrita** Año 2016
+        description: este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño
+-
+    I add a lecture template for this product
+-
+    !python {model: product.product}: |
+        self.button_generate_lecture_templates(cr, uid, [ref("curso_product_1")], context=None)
+-
+    I create a mail template for curso
+-
+    !record {model: email.template, id: email_template_1}:
+        name: email para el curso
+-
+    I create a curso based on this product
+-
+    !record {model: curso.curso, id: curso_curso_1}:
+        product: curso_product_1
+        main_speaker_id: curso_teacher_1
+        email_registration_id: email_template_1
+-
+    I check that state instance and name
+-
+    !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
+        - state == 'draft'
+        - instance == 1
+        - name == u'[PSK/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+  Then I create another curso based on this product
+-
+    !record {model: curso.curso, id: curso_curso_2}:
+        product: curso_product_1
+        main_speaker_id: curso_teacher_1
+        email_registration_id: email_template_1
+-
+  I check instance on second curso
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
+        - instance == 2
+-
+  I check name on second curso
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
+        - name == u'[PSK/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+  I create a schedule
+-
+  !record {model: curso.schedule, id: curso_schedule_1}:
+    start_time: 12
+    end_time: 15
+-
+  !record {model: curso.schedule, id: curso_schedule_2}:
+    start_time: 11
+    end_time: 16
+-
+  !record {model: curso.schedule, id: curso_schedule_3}:
+    start_time: 4
+    end_time: 6
+-
+  I check that name is ok
+-
+  !assert {model: curso.schedule, id: curso_schedule_3, severity: error, string: 'ill formed name'}:
+    - name == u'04:00 - 06:00 (2hs)'
+-
+    I create a diary with tree days adding it to curso_curso_2 / 3 classes in a week
+-
+    !record {model: curso.diary, id: curso_diary_1}:
+        curso_id: curso_curso_2
+        weekday: '1'
+        seq: 1
+        schedule: curso_schedule_1
+-
+    !record {model: curso.diary, id: curso_diary_2}:
+        curso_id: curso_curso_2
+        weekday: '2'
+        seq: 2
+        schedule: curso_schedule_2
+-
+    !record {model: curso.diary, id: curso_diary_3}:
+        curso_id: curso_curso_2
+        weekday: '3'
+        seq: 3
+        schedule: curso_schedule_3
+-
+    I add begin date
+-
+    !record {model: curso.curso, id: curso_curso_2}:
+        date_begin: '2016-01-11'
+-
+    I check curso name the last time
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+        - name == u'[PSK/02] Lun 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+    I check curso classes per weeek
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+        - classes_per_week == 3
+-
+    I generate attendance sheet for the curso
+-
+    !python {model: curso.curso}: |
+        self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")], context=context)
+-
+    I generate wordpress (html) data for curso
+-
+    !python {model: product.product}: |
+        self.button_generate_doc(cr, uid, [ref("curso_product_1")], context=context)
+-
+    I Generate lectures automatically
+-
+    !python {model: curso.curso}: |
+        self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
+-
+    !python {model: curso.lecture}: |
+        curso_lecture = self.pool.get('curso.lecture')
+        records = curso_lecture.search(cr, uid, [], context=context)
+-
+    I Register a student in the course
+-
+    !record {model: curso.registration, id: curso_registration_1}:
+        curso_id: curso_curso_2
+        partner_id: curso_student_1
+-
+    I make the student sign the course
+-
+    !python {model: curso.registration}: |
+        self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
+-
+    Student must be now a client
+-
+    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must be a client}:
+        - customer == True
+-
+    I Begin the course
+-
+    !python {model: curso.registration}: |
+        self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
+-
+    I confirm the curso
+-
+    !python {model: curso.registration}: |
+        self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
