@@ -432,5 +432,3 @@ class curso_curso(osv.osv):
                                                                ('curso_id', '=', ids[0])])
         return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
                                                context=context)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

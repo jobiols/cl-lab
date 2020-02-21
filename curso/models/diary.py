@@ -87,4 +87,3 @@ class curso_diary(models.Model):
         }
         self.weekday_name = dwd[self.weekday]
 
-        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

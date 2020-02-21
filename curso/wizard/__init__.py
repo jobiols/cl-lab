@@ -27,5 +27,3 @@ from . import move_registration
 from . import mail_confirm
 from . import send_mail
 from . import prepare_mass_mail
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -26,7 +26,6 @@ class TestCurso(SingleTransactionCase):
         super(TestCurso, self).setUp()
 
     def test_hijo(self):
-        print '= configurando para el test ===================='
         # creo todos los objetos
         self.partner_obj = self.env['res.partner']
         self.product_obj = self.env['product.product']
@@ -108,8 +107,4 @@ class TestCurso(SingleTransactionCase):
             'parent_curso_id': self.curso_1.id,
             'first_lecture_id': 1
         })
-
-        print '= configuración lista =========================='
-
-        print '= testeando 1 =================================='
         self.curso_1.button_curso_confirm()

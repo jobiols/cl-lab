@@ -37,5 +37,3 @@ class mail_confirm(models.TransientModel):
 
         for reg in reg_obj:
             reg.try_send_mail_by_lecture()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

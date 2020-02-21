@@ -41,5 +41,3 @@ class mails_to_send(models.Model):
             'Plantilla de mail',
             domain="[('model_id','=','curso.registration')]"
     )
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

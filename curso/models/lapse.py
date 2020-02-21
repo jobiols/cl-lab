@@ -55,6 +55,3 @@ class curso_lapse(models.Model):
         mm = t - int(t)
         hh = t - mm
         self.formatted_start_time = "{:0>2d}:{:0>2d}".format(int(hh), int(mm * 60))
-
-
-        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

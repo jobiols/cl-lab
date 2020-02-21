@@ -217,9 +217,6 @@ class curso_assistance(models.Model):
     @api.multi
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
-        print '3) send notification mail -------------------------------',
-        print 'a este partner', partner_id.name
-
         # Obtener el template para mandarle el mail,
         # En assistance estan los ausentes, me traigo los ausentes de este partner
         # Si encuentro ausentes en el futuro también valen y les busco recuperatorio.
@@ -229,26 +226,18 @@ class curso_assistance(models.Model):
 
         # Anoto todos los templates que hay que mandarle, habrá uno por cada curso
         template_ids = []
-        print 'detecto ausencia en estas clases -----------------------------------------'
         for rec in assistance:
-            print ' >>> ', rec.curso_instance, rec.seq, rec.lecture_id.name
             if rec.lecture_id.curso_id.email_recovery_id not in template_ids:
                 template_ids.append(rec.lecture_id.curso_id.email_recovery_id)
 
         # por cada template, mandar un mail
         for template in template_ids:
-            print 'template name [{}]'.format(template.name)
-
 #           Hasta que no este estable no mandamos mails
 #            mail_message = template.send_mail(partner_id.id)
-            print 'mail enviado ==========================='
             partner_id.info_recover_html1()
-            print ' '
 
     @api.multi
     def do_run_housekeeping(self):
-        print '1) do_run_houskeeping -------------------------------------------'
-
         # obtener las que faltaron y ponerles ausente
         # no se puede poner past en el dominio porque no puede ser stored=True
         assistance = self.env['curso.assistance'].search([('state', '=', 'programmed')])

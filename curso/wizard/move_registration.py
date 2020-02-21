@@ -113,5 +113,3 @@ class curso_move_registration(osv.osv_memory):
     _columns = {
         'curso_id': fields.many2one('curso.curso', 'Curso', required=True),
     }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

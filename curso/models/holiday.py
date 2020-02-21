@@ -43,4 +43,3 @@ class curso_holiday(models.Model):
             default=22
     )
 
-    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

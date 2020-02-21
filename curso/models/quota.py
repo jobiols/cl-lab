@@ -94,5 +94,3 @@ class curso_quota(models.Model):
             account_invoice_obj = self.env['account.invoice']
             for invoice in account_invoice_obj.search([('id', '=', self.invoice_id.id)]):
                 self.amount = invoice.amount_total
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -123,5 +123,3 @@ class TestCurso(TransactionCase):
             for ass in lec.assistance_id:
                 # verificar que la asistente sea Juana
                 self.assertEqual(ass.partner_id.name, 'Juana Perez Alumna')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

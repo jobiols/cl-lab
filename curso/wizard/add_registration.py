@@ -75,5 +75,3 @@ class add_registration(models.TransientModel):
             if rec.source == 'normal':
                 rec.discount = 33.333333
                 rec.disc_desc = 'Descuento normal'
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -177,9 +177,6 @@ class res_partner(models.Model):
                     'vacancy': lecture.reg_vacancy_rec,
                 })
 
-            for da in data:
-                print da['code'], da['lecture_no'], da['date'], da['vacancy']
-
             html = html_filter.html_filter()
             return html.info_recover_html(data)
 
@@ -236,19 +233,14 @@ class res_partner(models.Model):
         """
         self.ensure_one()
         ret = False
-        #print '2) check changed info --------------------------------------------------'
 
         # si no hay info que mandarle devuelvo false
         if not recover_ids:
             return False
 
-        print '2.1 --- self={} len={}'.format(self, len(self))
-
         # pasar la lista a string para compararla con la guardada
         for rec in self:
-            print '2.2 ------------------------------------------------------------------'  # , rec.name
             ri = ','.join(str(e) for e in recover_ids)
-            print '2.3 {} -> {}'.format(ri, rec.recover_ids)
             if ri != rec.recover_ids:
                 rec.recover_ids = ri
                 # hay nueva información que mandar
@@ -256,7 +248,4 @@ class res_partner(models.Model):
             else:
                 # no hay nueva información para mandar
                 ret = False
-
         return ret
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

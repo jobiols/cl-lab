@@ -36,5 +36,3 @@ class prepare_mass_mail(models.TransientModel):
         regs = self.env['curso.registration'].browse(self._context['active_ids'])
         for reg in regs:
             reg.partner_id.category_id += self.category_id
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

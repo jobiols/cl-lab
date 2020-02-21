@@ -43,5 +43,3 @@ class send_mail(models.TransientModel):
     def button_send_mail(self):
         if self.template:
             self.template.send_mail(self._context.get('registration'))
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

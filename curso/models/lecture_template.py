@@ -53,5 +53,3 @@ class lecture_template(models.Model):
                 'text': 'Clase nro %s' % (seq + 1)
             }
             self.create(new_rec)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

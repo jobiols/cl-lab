@@ -346,5 +346,3 @@ Lunes a sábados de 11 a 20 hs.<br/>
 </table>
 """
         return ret
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

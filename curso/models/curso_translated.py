@@ -622,7 +622,6 @@ class curso_curso(models.Model):
         self.may_go_in_process(self)
 
         self.state = 'in_progress'
-        print 'curso in process', self.curso_instance
 
     @api.one
     def button_curso_draft(self):
@@ -644,7 +643,6 @@ class curso_curso(models.Model):
 
     @api.one
     def may_go_in_process(self, silent=False):
-        print 'may go in process', self.curso_instance
         # verificar si está confirmado
         if self.state != 'confirm':
             if silent:
@@ -671,7 +669,6 @@ class curso_curso(models.Model):
 
     @api.one
     def may_go_done(self, silent=False):
-        print 'may go done', self.curso_instance
         if self.state != 'in_process':
             if silent:
                 return False
@@ -696,15 +693,12 @@ class curso_curso(models.Model):
 
             # terminar el curso en cada alumna
             rec.do_curso_done()
-            print 'curso terminado', rec.curso_instance
             rec.state = 'done'
 
     @api.one
     def do_invoice(self, actual_price, instance_code, seq, partner_id):
         """ Genera una factura relacionada con este curso """
 
-        print '------------------------ do invoice'
-        print partner_id
         date_invoice = datetime.today()
         date_due = (date_invoice + timedelta(days=10))
 

@@ -28,24 +28,6 @@ class curso_invoice(osv.osv_memory):
     _name = 'curso.invoice'
 
     def create_invoice(self, cr, uid, ids, invoice_data, context):
-
-        if False:
-            print('creando la factura -------->>>>>>>>>>>>>>>>>> ')
-            print('fecha', invoice_data.get('date_invoice'))
-            print('instancia', invoice_data.get('instance_code'))
-            print('alumna', invoice_data.get('partner_id').name)
-            print('cuota', invoice_data.get('quota'))
-            print('curso', invoice_data.get('curso_id').name)
-            print('company', invoice_data.get('company_id').name)
-
-            print('precio', invoice_data.get('curso_id').list_price)
-            print('descuento', invoice_data.get('discount'))
-            print('razon'), invoice_data.get('disc_desc', 'no hay razon')
-            print('producto', invoice_data.get('curso_id').product.name)
-            print('instancia', invoice_data.get('curso_id').curso_instance)
-            #            print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code')),1)
-            print (invoice_data.get('instance_code'))
-
         product_id = invoice_data.get('curso_id').product
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
         date_due = (date_invoice + timedelta(days=10))

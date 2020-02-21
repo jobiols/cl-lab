@@ -147,5 +147,3 @@ class curso_daily_report(osv.osv_memory):
         'date': fields.date('Fecha', required=True,
                             help=u"La fecha para la que se va a generar el reporte"),
     }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

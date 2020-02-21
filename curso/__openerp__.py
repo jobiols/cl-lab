@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '8.0.2.0.0',
+    'version': '12.0.0.0.0',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'author': 'jeo software',
@@ -74,6 +74,3 @@
     'auto_install': False,
     'images': [],
 }
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

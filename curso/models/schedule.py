@@ -79,6 +79,3 @@ class curso_schedule(models.Model):
         bb = self._f2h(self.end_time)
         cc = self._f2hh_mm(self.end_time - self.start_time)
         self.name = "{} - {} ({})".format(aa, bb, cc)
-
-
-        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

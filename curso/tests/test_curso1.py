@@ -396,6 +396,3 @@ class TestCurso(TransactionCase):
         # Se chequea el producto
         data = self.product1.info_curso_html_data(debug=True)
         self.assertEqual(data['mode'], u'Es una clase de 4 horas', 'error 22')
-
-
-        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
