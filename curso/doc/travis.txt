@@ -2,3 +2,7 @@
 Your code has been rated at 7.95/10
 count_errors 23
 pylint expected errors 0, found 23!
+-----------------------------------16
+Your code has been rated at 8.34/10
+count_errors 8
+pylint expected errors 0, found 8!

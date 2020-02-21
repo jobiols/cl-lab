@@ -28,8 +28,8 @@
     'depends': ['base',
                 'base_setup',
                 'board',
-                'email_template',
-                'l10n_ar_invoice',
+#                'email_template',    esto no esta en v12
+#                'l10n_ar_invoice',   dependia de este pero pareec que le cambiaron el nombre
                 'document_page',
                 'web_widget_text_markdown',
                 ],
