@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -18,35 +17,122 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+#from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class curso_move_registration(osv.osv_memory):
-    def button_move_registration(self, cr, uid, ids, context=None):
-        reg_pool = self.pool['curso.registration']
-        for wiz in self.browse(cr, uid, ids, context):
+class curso_move_registration(models.Model):
+    _name = "curso.move.registration"
+    _description = "Mover inscripciones entre cursos"
+
+#    _columns = {
+#        'curso_id': fields.many2one('curso.curso', 'Curso', required=True),
+#    }
+    curso_id = fields.Many2one(
+        'curso.curso',
+        string='Curso',
+        required=True
+    )
+
+#    def button_move_registration(self, cr, uid, ids, context=None):
+#        reg_pool = self.pool['curso.registration']
+#        for wiz in self.browse(cr, uid, ids, context):
+#            # verificar que las inscripciones estan canceladas
+#            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+#                if reg.state == 'done' or reg.state == 'confirm':
+#                    raise osv.except_osv(('Error!'), (
+#                        u"Solo se pueden mover inscripciones en estado interesada, señada y cancelada."))
+#            # por cada inscripcion marcada cambiarle el curso
+#            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+#                reg.curso_id = wiz.curso_id
+
+    def button_move_registration(self):
+        reg_obj = self.env['curso.registration']
+        for wiz in self:
             # verificar que las inscripciones estan canceladas
-            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+            ids = self._context.get('active_ids', [])
+            for reg in reg_obj.browse(ids):
                 if reg.state == 'done' or reg.state == 'confirm':
-                    raise osv.except_osv(('Error!'), (
-                        u"Solo se pueden mover inscripciones en estado interesada, señada y cancelada."))
-            # por cada inscripcion marcada cambiarle el curso
-            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+                    raise UserWarning('Error! Solo se pueden mover '
+                                      'inscripciones en estado interesada, '
+                                      'señada y cancelada.')
+#           por cada inscripcion marcada cambiarle el curso
+            for reg in reg_obj.browse(ids):
                 reg.curso_id = wiz.curso_id
+                
+#    def button_copy_registration(self, cr, uid, ids, context=None):
+#        reg_pool = self.pool['curso.registration']
+#        for wiz in self.browse(cr, uid, ids, context):
+#            # por cada inscripcion marcada duplicarla con el nuevo curso
+#            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+#                defaults = {
+#                    'curso_id': wiz.curso_id.id,
+#                    'user_id': uid,
+#                    'state': 'draft'
+#                }
+#                reg_pool.copy(cr, uid, reg.id, defaults, context=context)
 
-    def button_copy_registration(self, cr, uid, ids, context=None):
-        reg_pool = self.pool['curso.registration']
-        for wiz in self.browse(cr, uid, ids, context):
+    def button_copy_registration(self):
+        reg_obj = self.env['curso.registration']
+        for wiz in self:
             # por cada inscripcion marcada duplicarla con el nuevo curso
-            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+            ids = self._context.get('active_ids', [])
+            for reg in reg_obj.browse(ids):
                 defaults = {
                     'curso_id': wiz.curso_id.id,
-                    'user_id': uid,
+                    'user_id': self.env.uid,
                     'state': 'draft'
                 }
-                reg_pool.copy(cr, uid, reg.id, defaults, context=context)
+                reg.copy(defaults)
 
-    def create_grid_report(self, cr, uid, ids, cursos, context=None):
+#    def create_grid_report(self, cr, uid, ids, cursos, context=None):
+#        html = u"""
+#        <table style="width:100%;">
+#            <tbody>
+#            """
+#        for curso in cursos:
+#            html += u"""
+#                <tr>
+#                    <td width="10%%"><div style="text-align: center;">
+#                         Inicio<br />%s</div>
+#                    </td>
+#                    <td width="72%%" valign="top">
+#                        <h3><a href="%s">
+#                        %s<span style="font-size: small;"><sup>&nbsp;Cód %s</sup></span>
+#                        </a></h3>
+#                    </td>
+#                    <td width="8%%">
+#                        <p>%s hs</p>
+#                    </td>
+#                    <td width="10%%">
+#                        <a href="%s">Más datos</a>
+#                    </td>
+#                </tr>
+#                """ % (curso['date_begin'],
+#                       curso['product_url'],
+#                       curso['name'],
+#                       curso['code'],
+#                       curso['tot_hs_lecture'],
+#                       curso['product_url'])
+
+#        html += u"""
+#            </tbody>
+#        </table>
+#        """
+#        rep_name = 'reporte grilla para wordpress'
+#        # Borrar el documento si es que existe
+#        doc_pool = self.pool.get('document.page')
+#        records = doc_pool.search(cr, uid, [('name', '=', rep_name)])
+#        doc_pool.unlink(cr, uid, records)
+
+#        new_page = {
+#            'name': rep_name,
+#            'content': html,
+#        }
+#        # Generar el documento
+#        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+
+    def create_grid_report(self, cursos):
         html = u"""
         <table style="width:100%;">
             <tbody>
@@ -81,35 +167,43 @@ class curso_move_registration(osv.osv_memory):
         </table>
         """
         rep_name = 'reporte grilla para wordpress'
+        
         # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', rep_name)])
-        doc_pool.unlink(cr, uid, records)
+        doc_obj = self.env['document.page']
+        records = doc_obj.search([('name', '=', rep_name)])
+        records.unlink()
 
         new_page = {
             'name': rep_name,
             'content': html,
         }
         # Generar el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+        self.env['document.page'].create(new_page)
 
-    def button_grid_report(self, cr, uid, ids, context=None):
+#    def button_grid_report(self, cr, uid, ids, context=None):
+#        curso_obj = self.pool['curso.curso']
+#        for wiz in self.browse(cr, uid, ids, context):
+#            # armar una lista con los cursos a reportar
+#            cursos = []
+#            for reg in curso_obj.browse(cr, uid, context['active_ids']):
+#                cursos.append({'name': reg.product.name,
+#                               'code': reg.default_code,
+#                               'date_begin': reg.date_begin,
+#                               'product_url': reg.product.product_url,
+#                               'tot_hs_lecture': int(reg.tot_hs_lecture)
+#                               })
+#            self.create_grid_report(cr, uid, ids, cursos, context)
+
+    def button_grid_report(self):
         curso_obj = self.pool['curso.curso']
-        for wiz in self.browse(cr, uid, ids, context):
+        for wiz in self:
             # armar una lista con los cursos a reportar
             cursos = []
-            for reg in curso_obj.browse(cr, uid, context['active_ids']):
+            for reg in curso_obj.browse(self._context.get('active_ids', [])):
                 cursos.append({'name': reg.product.name,
                                'code': reg.default_code,
                                'date_begin': reg.date_begin,
                                'product_url': reg.product.product_url,
                                'tot_hs_lecture': int(reg.tot_hs_lecture)
                                })
-            self.create_grid_report(cr, uid, ids, cursos, context)
-
-    _name = "curso.move.registration"
-    _description = "Mover inscripciones entre cursos"
-
-    _columns = {
-        'curso_id': fields.many2one('curso.curso', 'Curso', required=True),
-    }
+            self.create_grid_report(cursos)
