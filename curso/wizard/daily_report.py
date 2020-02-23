@@ -20,10 +20,11 @@
 ##############################################################################
 from datetime import datetime
 
-from openerp.osv import osv, fields
+#from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class curso_daily_report(osv.osv_memory):
+class curso_daily_report(models.Model):
     """
     Daily report
     """
@@ -143,7 +144,13 @@ class curso_daily_report(osv.osv_memory):
     _name = "curso.daily.report"
     _description = "Reporte diario de alumnas"
 
-    _columns = {
-        'date': fields.date('Fecha', required=True,
-                            help=u"La fecha para la que se va a generar el reporte"),
-    }
+    date = fields.Date(
+        string='Fecha',
+        required=True,
+        help=u"La fecha para la que se va a generar el reporte"
+    )
+
+#    _columns = {
+#        'date': fields.date('Fecha', required=True,
+#                            help=u"La fecha para la que se va a generar el reporte"),
+#    }
