@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import report_curso_registration
-import curso_report_incoming
+from . import report_curso_registration
+from . import curso_report_incoming
