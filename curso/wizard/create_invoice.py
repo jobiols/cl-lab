@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution.
@@ -20,14 +19,16 @@
 ##############################################################################
 from datetime import datetime, timedelta
 
-from openerp.osv import osv
+#from openerp.osv import osv
+from odoo import models
 
 
-class curso_invoice(osv.osv_memory):
-    """ Wizard para generar las facturas """
+class CursoInvoice(models.Model):
+    """ Wizard para generar las facturas
+    """
     _name = 'curso.invoice'
 
-    def create_invoice(self, cr, uid, ids, invoice_data, context):
+    def create_invoice(self, invoice_data):
         product_id = invoice_data.get('curso_id').product
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
         date_due = (date_invoice + timedelta(days=10))
@@ -43,9 +44,7 @@ class curso_invoice(osv.osv_memory):
             'price_unit': product_id.list_price,
             'quantity': 1.0,
         }
-        invoice_line_id = self.pool.get(
-                'account.invoice.line').create(cr, uid, invoice_line, context=context)
-
+        invoice_line_id = self.env['account.invoice.line'].create(invoice_line)
         invoice_lines.append(invoice_line_id)
 
         if invoice_data.get('discount') != 0:
@@ -60,8 +59,7 @@ class curso_invoice(osv.osv_memory):
                 'price_unit': product_id.list_price * invoice_data.get('discount'),
                 'quantity': -1.0,
             }
-            invoice_line_id = self.pool.get('account.invoice.line').create(
-                    cr, uid, invoice_line, context=context)
+            invoice_line_id = self.env['account.invoice.line'].create(invoice_line)
             invoice_lines.append(invoice_line_id)
 
         new_invoice = {
@@ -81,14 +79,12 @@ class curso_invoice(osv.osv_memory):
             'fiscal_position': invoice_data.get(
                     'partner_id').property_account_position.id,
             'company_id': invoice_data.get('company_id').id,
-            'user_id': uid
+            'user_id': self.env.user
         }
-        invoice_id = self.pool.get('account.invoice').create(
-                cr, uid, new_invoice, context=context)
-
+        invoice_id = self.env['account.invoice'].create(new_invoice)
         return invoice_id
 
-    def button_gen_invoice(self, cr, uid, ids, context=None):
+    def button_gen_invoice(self):
         """ Generar facturas en borrador de todos los alumnos que están cursando.
             proceso:
             Seleccionamos las inscripciones que cumplen con:
@@ -107,11 +103,9 @@ class curso_invoice(osv.osv_memory):
         """
         # Revisamos la tabla de cuotas, me traigo las que estan pendientes
         register_pool = self.pool.get('curso.quota')
-        records = register_pool.search(cr, uid,
-                                       [('invoice_id', '=', False),
+        records = register_pool.search([('invoice_id', '=', False),
                                         ('date', '<=', datetime.utcnow())])
-
-        for quote in register_pool.browse(cr, uid, records, context):
+        for quote in records:
             if quote:
                 # crear invoice data dict
                 id = {}
@@ -126,9 +120,8 @@ class curso_invoice(osv.osv_memory):
                     id['disc_desc'] = quote.registration_id.disc_desc
                 id['historic_price'] = quote.list_price
 
-                invoice_id = self.create_invoice(cr, uid, ids, id, context=None)
-                r = register_pool.search(cr, uid, [('id', '=', quote.id)])
-                register_pool.write(
-                        cr, uid, r, {'invoice_id': invoice_id}, context=context)
+                invoice_id = self.create_invoice(id)
+                r = register_pool.search([('id', '=', quote.id)])
+                register_pool.write({'invoice_id': invoice_id})
 
         return True

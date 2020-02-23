@@ -25,7 +25,7 @@ from odoo import models, fields, api
 
 class curso_registration(models.Model):
     _name = 'curso.registration'
-    _inherit = ['mail.thread', 'documents.mixin']
+    _inherit = ['mail.thread'] # 'documents.mixin'
 
 #    def confirm_registration(self, cr, uid, ids, context=None):
 #        for reg in self.browse(cr, uid, ids, context=context or {}):
