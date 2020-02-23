@@ -273,10 +273,10 @@ class curso_assistance(models.Model):
                     curso.button_curso_done()
         """
 
-    def run_housekeeping(self, cr, uid, context=None):
+    def run_housekeeping(self):
         """ Chequea los ausentes y manda mails (si no le pongo esta firma no lo llama
             desde el cron)
         """
 
-        self.do_run_housekeeping(cr, uid, context)
+        self.do_run_housekeeping()
         return True

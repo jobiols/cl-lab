@@ -242,7 +242,7 @@ class CursoCurso(models.Model):
     # Estados de los cursos
     ###############################################################################
 
-    def button_curso_done(self, cr, uid, ids, context=None):
+    def button_curso_done(self):
         """
         Terminar el curso
         """

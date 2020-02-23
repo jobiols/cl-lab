@@ -25,9 +25,14 @@ from odoo import models, fields
 
 
 class curso_daily_report(models.Model):
-    """
-    Daily report
-    """
+    _name = "curso.daily.report"
+    _description = "Reporte diario de alumnas"
+
+    date = fields.Date(
+        string='Fecha',
+        required=True,
+        help=u"La fecha para la que se va a generar el reporte"
+    )
 
     def missing_data(self, alumna):
         ret = u''
@@ -89,18 +94,15 @@ class curso_daily_report(models.Model):
 
         return ret
 
-    def button_generate_daily_report(self, cr, uid, ids, context=None):
+    def button_generate_daily_report(self):
         # Obtener la fecha para el reporte
-        pool = self.pool.get('curso.daily.report')
-        for reg in pool.browse(cr, uid, ids, context):
+        for reg in self:
             date = reg.date
 
         data = []
         # Obtener todas las clases de la fecha del reporte solo para cursos confirmados.
         lectures = []
-        pool = self.pool.get('curso.lecture')
-        lectures_ids = pool.search(cr, uid, [('date', '=', date)])
-        for lecture in pool.browse(cr, uid, lectures_ids, context):
+        for lecture in self.env['curso.lecture'].search([('date', '=', date)]):
             if lecture.curso_id.state == 'confirm':
                 lectures.append(lecture)
 
@@ -108,12 +110,9 @@ class curso_daily_report(models.Model):
         pool_reg = self.pool.get('curso.registration')
         for lecture in lectures:
             alumnas = []
-            alumnas_ids = pool_reg.search(cr, uid,
-                                          [('curso_id', '=', lecture.curso_id.id),
-                                           '|',
-                                           ('state', '=', 'confirm'),
-                                           ('state', '=', 'signed')])
-            for alumna in pool_reg.browse(cr, uid, alumnas_ids, context):
+            alumnas = pool_reg.search([('curso_id', '=', lecture.curso_id.id),
+                                       ('state', 'in', ['confirm', 'signed'])])
+            for alumna in alumnas:
                 alumnas.append(alumna)
 
             data.append(
@@ -132,23 +131,15 @@ class curso_daily_report(models.Model):
         }
 
         # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        ids = doc_pool.search(cr, uid, [('name', '=', report_name)])
-        doc_pool.unlink(cr, uid, ids)
+        doc_pool = self.env['document.page']
+        document = doc_pool.search([('name', '=', report_name)])
+        document.unlink()
 
         # Generar el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+        self.env['document.page'].create(new_page)
 
         return True
 
-    _name = "curso.daily.report"
-    _description = "Reporte diario de alumnas"
-
-    date = fields.Date(
-        string='Fecha',
-        required=True,
-        help=u"La fecha para la que se va a generar el reporte"
-    )
 
 #    _columns = {
 #        'date': fields.date('Fecha', required=True,
