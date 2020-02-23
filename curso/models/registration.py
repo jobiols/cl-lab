@@ -19,99 +19,148 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+#from openerp.osv import fields, osv
+from odoo import models, fields, api
 
 
-class curso_registration(osv.osv):
+class curso_registration(models.Model):
     _name = 'curso.registration'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'documents.mixin']
 
-    def confirm_registration(self, cr, uid, ids, context=None):
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nuevo inicio de curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
-        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
+#    def confirm_registration(self, cr, uid, ids, context=None):
+#        for reg in self.browse(cr, uid, ids, context=context or {}):
+#            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
+#                                                      body=(   u'Nuevo inicio de curso: %s.') % (
+#                                                               reg.partner_id.name or '',),
+#                                                      subtype="curso.mt_curso_registration",
+#                                                      context=context)
+#        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    def button_reg_confirm(self, cr, uid, ids, context=None):
-        """ Boton empezo el curso
-        """
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso'). \
-                message_post(cr, uid, [reg.curso_id.id],
-                             body=(u'Nueva inscripción en el curso: %s.') % (
-                                 reg.partner_id.name or '',),
-                             subtype="curso.mt_curso_registration",
-                             context=context)
-        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
+    def confirm_registration(self):
+        return self.write({'state': 'confirm'})
 
-    def button_reg_draft(self, cr, uid, ids, context=None):
-        """ Boton volver a interesada
-        """
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(
-                    cr, uid, [reg.curso_id.id],
-                    body=(
-                             u'Vuelve a interesarse: %s.') % (
-                             reg.partner_id.name or '',),
-                    subtype="curso.mt_curso_registration",
-                    context=context)
-        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
+#    def button_reg_confirm(self, cr, uid, ids, context=None):
+#        """ Boton empezo el curso
+#        """
+#        for reg in self.browse(cr, uid, ids, context=context or {}):
+#            self.pool.get('curso.curso'). \
+#                message_post(cr, uid, [reg.curso_id.id],
+#                             body=(u'Nueva inscripción en el curso: %s.') % (
+#                                 reg.partner_id.name or '',),
+#                             subtype="curso.mt_curso_registration",
+#                             context=context)
+#        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
+    def button_reg_confirm(self):
+        return self.write({'state': 'confirm'})
 
-    def button_reg_done(self, cr, uid, ids, context=None):
-        """ Boton Termino el curso
-        """
-        if context is None:
-            context = {}
-        today = fields.datetime.now()
+#    def button_reg_draft(self, cr, uid, ids, context=None):
+#        """ Boton volver a interesada
+#        """
+#        for reg in self.browse(cr, uid, ids, context=context or {}):
+#            self.pool.get('curso.curso').message_post(
+#                    cr, uid, [reg.curso_id.id],
+#                    body=(
+#                             u'Vuelve a interesarse: %s.') % (
+#                             reg.partner_id.name or '',),
+#                    subtype="curso.mt_curso_registration",
+#                    context=context)
+#        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
+    def button_reg_draft(self):
+        return self.write({'state': 'draft'})
+
+#    def button_reg_done(self, cr, uid, ids, context=None):
+#        """ Boton Termino el curso
+#        """
+#        if context is None:
+#            context = {}
+#        today = fields.datetime.now()
+#        # verificar si tiene cuotas impagas
+#        for registration in self.browse(cr, uid, ids, context=context):
+#            register_pool = self.pool.get('curso.quota')
+#            records = register_pool.search(
+#                    cr, uid, [('registration_id', '=', registration.id),
+#                              ('list_price', '=', 0)])
+#            if len(records) != 0:
+#                raise osv.except_osv(('Error!'),
+#                                     u"No puede terminar el curso porque tiene cuotas pendientes. \
+#                                     Se debería cancelar la inscripción, o cobrarle las cuotas")
+#
+#            if today >= registration.curso_id.date_begin:
+#                values = {'state': 'done', 'date_closed': today}
+#                self.write(cr, uid, ids, values)
+#            else:
+#                raise osv.except_osv(
+#                        'Error!',
+#                        u"Hay que esperar al dia de inicio del curso para decir que lo \
+#                        terminó.")
+#        return True
+
+    def button_reg_done(self):
+        today = fields.Datetime.now()
         # verificar si tiene cuotas impagas
-        for registration in self.browse(cr, uid, ids, context=context):
-            register_pool = self.pool.get('curso.quota')
-            records = register_pool.search(
-                    cr, uid, [('registration_id', '=', registration.id),
-                              ('list_price', '=', 0)])
+        for registration in self:
+            quota_obj = self.env['curso.quota']
+            records = quota_obj.search(
+                [('registration_id', '=', registration.id),
+                 ('list_price', '=', 0)])
             if len(records) != 0:
-                raise osv.except_osv(('Error!'),
-                                     u"No puede terminar el curso porque tiene cuotas pendientes. \
-                                     Se debería cancelar la inscripción, o cobrarle las cuotas")
+                raise UserWarning(u'Error! No puede terminar el curso porque '
+                                  u'tiene cuotas pendientes. Se debería '
+                                  u'cancelar la inscripción, o cobrarle '
+                                  u'las cuotas')
 
             if today >= registration.curso_id.date_begin:
                 values = {'state': 'done', 'date_closed': today}
-                self.write(cr, uid, ids, values)
+                self.write(values)
             else:
-                raise osv.except_osv(
-                        'Error!',
-                        u"Hay que esperar al dia de inicio del curso para decir que lo \
-                        terminó.")
-
+                raise UserWarning(u'Error! Hay que esperar al dia de inicio '
+                                  u'del curso para decir que lo terminó.')
         return True
 
-    def mail_user(self, cr, uid, ids, context=None):
+#    def mail_user(self, cr, uid, ids, context=None):
+#        """
+#        Send email to user with email_template when registration is done
+#        """
+#        for registration in self.browse(cr, uid, ids, context=context):
+#            if registration.curso_id.state == 'confirm' and registration.curso_id.email_confirmation_id.id:
+#                self.mail_user_confirm(cr, uid, ids, context=context)
+#            else:
+#                template_id = registration.curso_id.email_registration_id.id
+#                if template_id:
+#                    mail_message = self.pool.get('email.template').send_mail(cr, uid,
+#                                                                             template_id,
+#                                                                             registration.id)
+#        return True
+
+    def mail_user(self):
+        """ Send email to user with email_template when registration is done
         """
-        Send email to user with email_template when registration is done
-        """
-        for registration in self.browse(cr, uid, ids, context=context):
+        for registration in self:
             if registration.curso_id.state == 'confirm' and registration.curso_id.email_confirmation_id.id:
-                self.mail_user_confirm(cr, uid, ids, context=context)
+                self.mail_user_confirm()
             else:
                 template_id = registration.curso_id.email_registration_id.id
                 if template_id:
-                    mail_message = self.pool.get('email.template').send_mail(cr, uid,
-                                                                             template_id,
-                                                                             registration.id)
+                    mail_message = self.env['email.template'].send_mail(template_id, registration.id)
         return True
 
-    def mail_user_confirm(self, cr, uid, ids, context=None):
+#    def mail_user_confirm(self, cr, uid, ids, context=None):
+#        """
+#        Send email to user when the curso is confirmed
+#        """
+#        for registration in self.browse(cr, uid, ids, context=context):
+#            template_id = registration.curso_id.email_confirmation_id.id
+#            if template_id:
+#                mail_message = self.pool.get('email.template').send_mail(cr, uid,
+#                                                                         template_id,
+#                                                                         registration.id)
+#        return True
+
+    def mail_user_confirm(self):
+        """ Send email to user when the curso is confirmed
         """
-        Send email to user when the curso is confirmed
-        """
-        for registration in self.browse(cr, uid, ids, context=context):
+        for registration in self:
             template_id = registration.curso_id.email_confirmation_id.id
             if template_id:
-                mail_message = self.pool.get('email.template').send_mail(cr, uid,
-                                                                         template_id,
-                                                                         registration.id)
+                mail_message = self.env['email.template'].send_mail(template_id, registration.id)
         return True
