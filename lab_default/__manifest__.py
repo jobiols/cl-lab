@@ -52,8 +52,7 @@
     'repos': [
         {'usr': 'jobiols', 'repo': 'cl-lab', 'branch': '12.0'},
         {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
-        {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0',
-         'ssh': True, 'host': 'bitbucket.org'},
+        {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0'},
 
         {'usr': 'jobiols', 'repo': 'odoo-etl', 'branch': '12.0'},
 
