@@ -62,7 +62,7 @@
 
     # list of url repos to install in the form 'repo-url directory'
     'git-repos': [
-        'https://github.com/jobiols/cl-labb.git',
+        'git@github.com:jobiols/cl-lab.git',
 
 #        {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
 #        {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0'},
