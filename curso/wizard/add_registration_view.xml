@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
+
         <record id="view_curso_add_registration" model="ir.ui.view">
             <field name="name">Agregar Inscripcion a curso</field>
             <field name="model">curso.add_registration</field>
             <field name="arch" type="xml">
                 <form string="Anotar como interesada">
                     <group>
-                        <label string="Seleccione el curso en el que está interesada esta alumna."/>
+                        <p>Seleccione el curso en el que está interesada esta alumna.</p>
                     </group>
                     <group>
                         <field name="curso_id"/>
@@ -23,6 +24,7 @@
                         or
                         <button string="Cancel" class="oe_link" special="cancel"/>
                     </footer>
+
                 </form>
             </field>
         </record>
@@ -32,10 +34,12 @@
         <record id="wizard_curso_add_registration" model="ir.actions.act_window">
             <field name="name">Anotar como interesada</field>
             <field name="res_model">curso.add_registration</field>
+<!-- TODO ver que es esto que no anda
             <field name="view_type">form</field>
+-->
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
     </data>
-</openerp>
+</odoo>

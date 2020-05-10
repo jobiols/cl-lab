@@ -120,14 +120,14 @@ class report_curso_registration(models.Model):
 #    }
 #    _order = 'curso_date desc'
 
-    def init(self, cr):
+    def init(self):
         """
-        Initialize the sql view for the curso registration
+            Initialize the sql view for the curso registration
         """
-        tools.drop_view_if_exists(cr, 'report_curso_registration')
+        tools.drop_view_if_exists(self._cr, self._table)
 
         # TOFIX this request won't select cursos that have no registration
-        cr.execute(""" CREATE VIEW report_curso_registration AS (
+        self._cr.execute(""" CREATE VIEW report_curso_registration AS (
             SELECT
                 e.id::varchar || '/' || coalesce(r.id::varchar,'') AS id,
                 e.id AS curso_id,

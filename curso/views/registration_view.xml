@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
-
 
         <act_window
                 id="act_register_curso_partner"
@@ -217,4 +216,4 @@
                   parent="curso_main_menu" sequence="20"/>
 
     </data>
-</openerp>
+</odoo>
