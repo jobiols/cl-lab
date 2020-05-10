@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '12.0.0.0.0',
+    'version': '13.0.0.0',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'author': 'jeo software',
@@ -31,7 +31,7 @@
 #                'email_template',    esto no esta en v12
 #                'l10n_ar_invoice',   dependia de este pero pareec que le cambiaron el nombre
                 'document_page',
-                'web_widget_text_markdown',
+#                'web_widget_text_markdown', no esta en v13
                 ],
     'data': [
         'security/curso_security.xml',

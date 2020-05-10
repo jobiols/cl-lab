@@ -19,7 +19,7 @@
 # -----------------------------------------------------------------------------
 {
     'name': 'lab',
-    'version': '13.0.0.0.0',
+    'version': '13.0.0.0',
     'license': 'Other OSI approved licence',
     'category': 'Default Application',
     'summary': 'Customization for lab',
@@ -63,7 +63,7 @@
     # list of url repos to install in the form 'repo-url directory'
     'git-repos': [
         'git@github.com:jobiols/cl-lab.git',
-
+        'https://github.com/OCA/knowledge.git',
 #        {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
 #        {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0'},
 
