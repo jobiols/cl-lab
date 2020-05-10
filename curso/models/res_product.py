@@ -123,39 +123,41 @@ class product_product(models.Model):
         help=u"Información que aparece en el sitio y en los mails",
     )
 
-    @api.one
     @api.depends('lst_price', 'standard_price')
     def _compute_prices(self):
-        # TODO poner ensto en una configuracion
-        public_pricelist_id = 1
-        pro_pricelist_id = 3
+        # TODO poner esto en una configuracion
+        for rec in self:
+            public_pricelist_id = 1
+            pro_pricelist_id = 3
 
-        # calcular el precios basado en la lista de precios
-        self.public_price = self.pool.get('product.pricelist').price_get(
-            self.env.cr, self.env.uid, [public_pricelist_id], self.id, 1.0,
-            context=None)[public_pricelist_id]
+            # calcular el precios basado en la lista de precios
+            rec.public_price = self.pool.get('product.pricelist').price_get(
+                self.env.cr, self.env.uid, [public_pricelist_id], self.id, 1.0,
+                context=None)[public_pricelist_id]
 
-        self.pro_price = self.pool.get('product.pricelist').price_get(
-            self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
-            context=None)[pro_pricelist_id]
+            rec.pro_price = self.pool.get('product.pricelist').price_get(
+                self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
+                context=None)[pro_pricelist_id]
 
-    @api.one
     @api.constrains('default_code', 'type')
     def _curso_unique_default_code(self):
+        # TODO esto ya debe estar en otro lado, hay un modulo que lo hace
+        # habria que quitalo
+        self.ensure_one
         if self.type == 'curso':
-            recordset = self.search([('default_code', '=', self.default_code)])
-            if len(recordset) > 1:
+            rec = self.search([('default_code', '=', self.default_code),
+                               ('id', '!=', self.id)])
+            if rec:
                 raise ValidationError(
-                    'El curso {} {} ya está ingresado'.format(self.default_code,
-                                                              self.name))
+                    'El curso %s %s ya está ingresado' % (
+                    self.default_code, self.name))
 
-    @api.one
     def button_generate_lecture_templates(self):
-        no_clases = self.tot_hs_lecture / self.hs_lecture
-        temp_obj = self.env['curso.lecture_template']
-        temp_obj.create_template(self.id, no_clases)
+        for rec in self:
+            no_clases = rec.tot_hs_lecture / rec.hs_lecture
+            temp_obj = self.env['curso.lecture_template']
+            temp_obj.create_template(rec.id, no_clases)
 
-    @api.multi
     def info_curso_html_data(self, debug=False):
         """ informacion para armar el html.
             El debug es para correr los tests!!
@@ -190,7 +192,8 @@ class product_product(models.Model):
         if self.mercadopago_button:
             data['mercadopago_button'] = self.mercadopago_button
         if self.mercadopago_button_discount:
-            data['mercadopago_button_discount'] = self.mercadopago_button_discount
+            data[
+                'mercadopago_button_discount'] = self.mercadopago_button_discount
         if self.mercadopago_discount:
             data['mercadopago_discount'] = self.mercadopago_discount
 
@@ -244,7 +247,6 @@ class product_product(models.Model):
 
         return data
 
-    @api.multi
     def build_html_page(self):
         data = self.info_curso_html_data()
         html = html_filter.html_filter()
@@ -255,7 +257,6 @@ class product_product(models.Model):
         ret += html.info_curso(data, col=1)
         return ret
 
-    @api.multi
     def button_generate_doc(self):
         """ Generate html data for curso
         """
@@ -301,7 +302,8 @@ class product_product(models.Model):
         # recorrer diary agrupando por schedule
         for diary_line in diary:
             # obtengo una referencia a la linea
-            fd_line = self.find_schedule(formatted_diary, diary_line['schedule'])
+            fd_line = self.find_schedule(formatted_diary,
+                                         diary_line['schedule'])
             if fd_line:
                 # si existe el horario le agrego el día a la lista de dias
                 fd_line['list_dias'].append(diary_line['weekday_name'])
@@ -317,4 +319,3 @@ class product_product(models.Model):
             fdl['dias'] = ', '.join(fdl['list_dias'])
 
         return formatted_diary
-

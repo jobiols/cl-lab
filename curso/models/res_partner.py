@@ -184,12 +184,10 @@ class res_partner(models.Model):
             html = html_filter.html_filter()
             return html.info_recover_html(data)
 
-    @api.multi
     def get_mail_footer_html(self):
         html = html_filter.html_filter()
         return html.default_footer()
 
-    @api.multi
     def get_product_price_html(self, default_code_list):
         products = []
         for default_code in default_code_list:
@@ -204,12 +202,10 @@ class res_partner(models.Model):
         html = html_filter.html_filter()
         return html.get_product_price(products)
 
-    @api.multi
     def get_birthdate(self):
         return datetime.strptime(
             self.date, '%Y-%m-%d').strftime('%d/%m/%Y') if self.date else False
 
-    @api.multi
     def get_info(self):
         for reg in self:
             ret = []
@@ -227,7 +223,6 @@ class res_partner(models.Model):
                 ret.append(u'Nos debe ${}'.format(reg.credit))
             return ', '.join(ret)
 
-    @api.multi
     def check_changed_info(self, recover_ids):
         """
             Ver si cambió la información a mandarle, si no cambió o tengo una lista vacia o sea no hay

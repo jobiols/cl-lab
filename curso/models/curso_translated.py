@@ -653,7 +653,6 @@ class curso_curso(models.Model):
         for rec in self:
             rec.state = 'draft'
 
-    @api.multi
     def do_curso_done(self):
         """ Poner las alumnas del curso en estado cumplido si estan en cursando y tienen todas las clases """
         for rec in self:
@@ -711,7 +710,6 @@ class curso_curso(models.Model):
                     raise Warning('Error!', u"El curso todavia no termina.")
             return True
 
-    @api.multi
     def button_curso_done(self):
         """ Terminar el curso, y también a las alumnas que cursaron y
             completaron todas las clases
@@ -732,7 +730,8 @@ class curso_curso(models.Model):
 
             invoice_lines = []
             invoice_line = {
-                'name': u'Recuperación clase {} del curso {}'.format(seq, instance_code),
+                'name': u'Recuperación clase {} del curso {}'.format(seq,
+                                                                     instance_code),
                 'sequence': 5,
                 'invoice_id': False,
                 # TODO aca hay una cuenta contable harcodeada !!!
@@ -749,7 +748,8 @@ class curso_curso(models.Model):
                 'date_invoice': date_invoice.strftime('%Y-%m-%d'),
                 'name': '{} C{:.0f}'.format(instance_code, seq),
                 'type': 'out_invoice',
-                'reference': '{} recuperatorio C{:.0f}'.format(instance_code, seq),
+                'reference': '{} recuperatorio C{:.0f}'.format(instance_code,
+                                                               seq),
                 'account_id': 11,
                 'partner_id': partner_id.id,
                 'journal_id': 29,
