@@ -26,12 +26,18 @@
 
                 <!-- este campo no lo pongo invisible sino que lo elimino porque estoy
                 usandolo para el cumpleaños y lo pongo en otro lado.-->
+
+                <!-- TODO Parece que este campo ya no esta asi que no lo puedo eliminar
+
                 <field name="date" position="replace"/>
+-->
+
+                <!-- TODO Este campo ya no esta
 
                 <field name="fax" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-
+-->
                 <field name="title" position="replace">
                     <field name="teacher" options='{"no_open": True}'
                            attrs="{'invisible': [('is_company','=', True)]}"/>
@@ -151,7 +157,7 @@
         <!--  Partners inherited tree view -->
 
         <record id="view_partner_tree_curso" model="ir.ui.view">
-            <field name="name">res.partner.tree</field>
+            <field name="name">CURSO partner agregar campos</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_tree"/>
             <field name="arch" type="xml">
@@ -164,14 +170,14 @@
             </field>
         </record>
 
-        <!--  Partners inherited searcho view -->
-
+        <!--  Partners inherited searcho view
+        TODO Arreglar la search view
         <record id="inherited_view_res_partner_filter" model="ir.ui.view">
-            <field name="name">Alumnas - Busqueda</field>
+            <field name="name">CURSO Alumnas - Busqueda</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_res_partner_filter"/>
             <field name="arch" type="xml">
-                <!-- agrego el filtro después de proveedore -->
+                <!- - agrego el filtro después de proveedore - ->
                 <xpath expr="filter[@name='customer']" position="after">
                     <filter string="Profesoras" domain="[('teacher', '=', 1)]"/>
                     <field name="email"/>
@@ -183,8 +189,10 @@
                     <field name="c_finished"/>
                     <field name="c_incomplete"/>
                 </xpath>
+
+
             </field>
         </record>
-
+-->
     </data>
 </openerp>

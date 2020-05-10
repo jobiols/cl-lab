@@ -1,10 +1,12 @@
-<?xml version="1.0"?>
-<openerp>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
     <data>
-
-        <record id="act_curso_list_register_curso" model="ir.actions.act_window">
+        <record id="act_curso_list_register_curso"
+                model="ir.actions.act_window">
             <field name="res_model">curso.registration</field>
+            <!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
             <field name="name">Inscripciones</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="context">{'search_default_curso_id': active_id,
@@ -17,7 +19,7 @@
         <!-- Cursos Form View -->
 
         <record model="ir.ui.view" id="view_curso_form">
-            <field name="name">Cursos</field>
+            <field name="name">CURSO Cursos form</field>
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
                 <form string="Cursos">
@@ -230,11 +232,10 @@
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
                 <tree string="Cursos"
-                      colors="black: state=='draft';
-                              green: state=='confirm';
-                              blue:  state=='in_progress';
-                              brown: state=='done';
-                              grey:  state=='cancel';">
+                      decoration-muted="state=='done'"
+                      decoration-success="state=='confirm'"
+                      decoration-info="state=='in_progress'"
+                      decoration-danger="state=='cancel'">
 
                      <button readonly="True" class="oe_inline oe_stat_button" icon="STOCK_DIALOG_WARNING"
                              attrs="{'invisible': [('register_avail', '!=', 0)]}"/>
@@ -368,23 +369,9 @@
             </field>
         </record>
 
-        <!-- Cursos  Calendar  View
 
-        <record id="view_curso_calendar" model="ir.ui.view">
-            <field name="name">curso.curso.calendar</field>
-            <field name="model">curso.curso</field>
-            <field eval="2" name="priority"/>
-            <field name="arch" type="xml">
-                <calendar color="type" date_start="date_begin"
-                          string="curso Organization">
-                    <field name="name"/>
-                    < ! - -  <field name="type"/> - - >
-                </calendar>
-            </field>
-        </record>
-        -->
-
-        <!-- Curso Search View -->
+        <!-- Curso Search View
+         TODO arreglar serarch view
 
         <record model="ir.ui.view" id="view_curso_search">
             <field name="name">Cursos</field>
@@ -423,6 +410,7 @@
             </field>
         </record>
 
+-->
 
         <!-- Cursos Organisation/CONFIGURATION/CURSOS  -->
 
@@ -430,11 +418,17 @@
             <field name="name">Cursos</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">curso.curso</field>
+<!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
             <!--           <field name="view_mode">kanban,calendar,tree,form</field> -->
             <field name="view_mode">tree,form</field>
             <field name="context">{"search_default_upcoming":1}</field>
+
+            <!-- TODO reponer esto cuando se arregle la search view
             <field name="search_view_id" ref="view_curso_search"/>
+            -->
+
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Click para agregar un nuevo curso.
@@ -449,9 +443,10 @@
         </record>
 
 
+
         <!-- con esto aparece en el boton MAS -->
         <!-- src_model donde aparece el MAS -->
-        <!-- res_model wizard que arranca -->
+        <!-- res_model wizard que arranca
         <act_window name="Generar documentación de cursos"
                     res_model="curso.information"
                     src_model="curso.curso"
@@ -488,5 +483,25 @@
             </field>
         </record>
 
+-->
+
+        <!-- Cursos  Calendar  View
+
+        Esto ya estaba comentado cuando vine a migrarlo.
+
+        <record id="view_curso_calendar" model="ir.ui.view">
+            <field name="name">curso.curso.calendar</field>
+            <field name="model">curso.curso</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar color="type" date_start="date_begin"
+                          string="curso Organization">
+                    <field name="name"/>
+                    < ! - -  <field name="type"/> - - >
+                </calendar>
+            </field>
+        </record>
+        -->
+
     </data>
-</openerp>
+</odoo>

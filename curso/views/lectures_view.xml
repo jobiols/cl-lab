@@ -97,9 +97,10 @@
             </field>
         </record>
 
-        <!-- Lectures Search View -->
+        <!-- Lectures Search View
+        TODO Arreglar esta search view
 
-        <record model="ir.ui.view" id="view_lecture_search">
+        <record id="view_lecture_search" model="ir.ui.view">
             <field name="name">Clases</field>
             <field name="model">curso.lecture</field>
             <field name="arch" type="xml">
@@ -121,7 +122,7 @@
                 </search>
             </field>
         </record>
-
+-->
         <!-- Lectures Calendar view -->
 
         <record model="ir.ui.view" id="view_lecture_calendar">
@@ -142,13 +143,15 @@
             <field name="name">Clases</field>
             <field name="res_model">curso.lecture</field>
             <field name="view_mode">tree,form,calendar</field>
+<!-- TODO ver que es esto
             <field name="view_type">form</field>
+-->
         </record>
 
         <!-- Lectures Menu -->
 
         <menuitem name="Clases"
-                  id="menu_curso_lecture" parent="base.menu_curso_main"
+                  id="menu_curso_lecture" parent="menu_curso_main"
                   action="action_curso_lecture" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
     </data>

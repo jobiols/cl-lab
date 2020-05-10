@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Agregar un recuperatorio a una alumna">
                     <group>
-                        <label string="Seleccione la clase a la que va a asistir la alumna para recuperar."/>
+                        <p>Seleccione la clase a la que va a asistir la alumna para recuperar.</p>
                     </group>
                     <group>
                         <field name="dummy" invisible="1"/>
@@ -29,7 +29,9 @@
         <record id="wizard_curso_add_recover" model="ir.actions.act_window">
             <field name="name">Agregar recuperatorio</field>
             <field name="res_model">curso.add_recover</field>
+<!-- TODO ver que es esto
             <field name="view_type">form</field>
+-->
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
