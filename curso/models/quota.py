@@ -26,71 +26,73 @@ class curso_quota(models.Model):
     _order = 'date desc'
 
     registration_id = fields.Many2one(
-            'curso.registration',
-            'Inscripcion',
-            required=True
+        'curso.registration',
+        'Inscripcion',
+        required=True
     )
 
     date = fields.Date(
-            'Fecha factura'
+        'Fecha factura'
     )
 
     list_price = fields.Float(
-            'Precio'
+        'Precio'
     )
 
     quota = fields.Integer(
-            '#cuota',
-            readonly=False
+        '#cuota',
+        readonly=False
     )
 
     invoice_id = fields.Many2one(
-            'account.invoice',
-            'Factura',
-            required=False
+        'account.invoice',
+        'Factura',
+        required=False
     )
 
     amount = fields.Char(
-            compute="_get_amount_paid",
-            string='Facturado'
+        compute="_compute_amount",
+        string='Facturado'
     )
 
     state = fields.Char(
-            compute="_get_state",
-            string='Estado Factura'
+        compute="_get_state",
+        string='Estado Factura'
     )
 
     curso_inst = fields.Char(
-            related='registration_id.curso_id.curso_instance',
-            string='Instancia',
-            readonly=True
+        related='registration_id.curso_id.curso_instance',
+        string='Instancia',
+        readonly=True
     )
 
     partner_id = fields.Char(
-            related='registration_id.partner_id.name',
-            string='Alumna',
-            readonly=True
+        related='registration_id.partner_id.name',
+        string='Alumna',
+        readonly=True
     )
 
-    @api.one
     def _get_state(self):
-        self.state = 'Pendiente'
-        if self.invoice_id:
-            account_invoice_obj = self.env['account.invoice']
-            for invoice in account_invoice_obj.search([('id', '=', self.invoice_id.id)]):
-                if invoice.state == 'draft':
-                    self.state = 'Borrador'
-                if invoice.state == 'paid':
-                    self.state = 'Pagado'
-                if invoice.state == 'open':
-                    self.state = 'Abierto'
-                if invoice.state == 'cancel':
-                    self.state = 'Cancelado'
+        for rec in self:
+            rec.state = 'Pendiente'
+            if rec.invoice_id:
+                account_invoice_obj = rec.env['account.invoice']
+                domain = [('id', '=', rec.invoice_id.id)]
+                for invoice in account_invoice_obj.search(domain):
+                    if invoice.state == 'draft':
+                        rec.state = 'Borrador'
+                    if invoice.state == 'paid':
+                        rec.state = 'Pagado'
+                    if invoice.state == 'open':
+                        rec.state = 'Abierto'
+                    if invoice.state == 'cancel':
+                        rec.state = 'Cancelado'
 
-    @api.one
-    def _get_amount_paid(self):
-        self.amount = 0
-        if self.invoice_id:
-            account_invoice_obj = self.env['account.invoice']
-            for invoice in account_invoice_obj.search([('id', '=', self.invoice_id.id)]):
-                self.amount = invoice.amount_total
+    def _compute_amount(self):
+        for rec in self:
+            rec.amount = 0
+            if rec.invoice_id:
+                account_invoice_obj = self.env['account.invoice']
+                domain = [('id', '=', rec.invoice_id.id)]
+                for invoice in account_invoice_obj.search(domain):
+                    rec.amount = invoice.amount_total
