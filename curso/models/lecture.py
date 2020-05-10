@@ -31,92 +31,91 @@ class curso_lecture(models.Model):
     _order = 'date_start'
 
     name_list = fields.Char(
-            compute='_get_name_list'
+        compute='_get_name_list'
     )
     name = fields.Text(
-            'Contenido de la clase'
+        'Contenido de la clase'
     )
     date = fields.Date(
-            'Fecha',
-            store="True",
-            compute="_get_date"
+        'Fecha',
+        store="True",
+        compute="_get_date"
     )
     curso_id = fields.Many2one(
-            'curso.curso',
-            string='Curso',
-            help='Curso al que pertenece esta clase',
-            required=True
+        'curso.curso',
+        string='Curso',
+        help='Curso al que pertenece esta clase',
+        required=True
     )
     schedule_id = fields.Many2one(
-            'curso.schedule',
-            string='Horario programado',
-            help='Horario original de la clase',
-            required=True
+        'curso.schedule',
+        string='Horario programado',
+        help='Horario original de la clase',
+        required=True
     )
     weekday = fields.Char(
-            compute="_get_weekday",
-            string="Dia"
+        compute="_get_weekday",
+        string="Dia"
     )
     date_start = fields.Datetime(
-            string="Inicio de clase",
-            required=True
+        string="Inicio de clase",
+        required=True
     )
     date_stop = fields.Datetime(
-            string="Fin de clase",
-            required=True
+        string="Fin de clase",
+        required=True
     )
     seq = fields.Integer(
-            'Número de clase',
-            required=True
+        'Número de clase',
+        required=True
     )
     assistance_id = fields.One2many(
-            'curso.assistance',
-            'lecture_id'
+        'curso.assistance',
+        'lecture_id'
     )
     default_code = fields.Char(
-            related="curso_id.default_code"
+        related="curso_id.default_code"
     )
     next = fields.Boolean(
-            related="curso_id.next"
+        related="curso_id.next"
     )
     reg_current = fields.Integer(
-            'Conf',
-            related="curso_id.register_current",
-            help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
+        'Conf',
+        related="curso_id.register_current",
+        help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
     )
     reg_max = fields.Integer(
-            'Max',
-            related="curso_id.register_max",
-            help=u"La cantidad máxima alumnas que puede contener esta clase"
+        'Max',
+        related="curso_id.register_max",
+        help=u"La cantidad máxima alumnas que puede contener esta clase"
     )
     reg_recover = fields.Integer(
-            'Recuperatorio',
-            compute="_get_reg_vacancy",
-            help=u"La cantidad de alumnas anotadas en esta clase para recuperar"
+        'Recuperatorio',
+        compute="_get_reg_vacancy",
+        help=u"La cantidad de alumnas anotadas en esta clase para recuperar"
     )
     reg_absent = fields.Integer(
-            'Ausente',
-            compute="_get_reg_vacancy",
-            help=u"La cantidad de alumnas que sabemos que no van a venir porque lo informaron"
+        'Ausente',
+        compute="_get_reg_vacancy",
+        help=u"La cantidad de alumnas que sabemos que no van a venir porque lo informaron"
     )
     reg_vacancy = fields.Integer(
-            'Vacantes',
-            compute="_get_reg_vacancy",
-            help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan y las que "
-                 u"avisan que no van a venir"
+        'Vacantes',
+        compute="_get_reg_vacancy",
+        help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan y las que "
+             u"avisan que no van a venir"
     )
     reg_vacancy_rec = fields.Integer(
-            'Vacantes para las que recuperan',
-            compute="_get_reg_vacancy",
-            help=u"La cantidad de vacantes que pueden usar las que recuperan."
+        'Vacantes para las que recuperan',
+        compute="_get_reg_vacancy",
+        help=u"La cantidad de vacantes que pueden usar las que recuperan."
     )
     reg_virtual = fields.Integer(
-            'Total real',
-            compute="_get_reg_vacancy",
-            help=u"La cantidad total de alumnas reales que hay"
+        'Total real',
+        compute="_get_reg_vacancy",
+        help=u"La cantidad total de alumnas reales que hay"
     )
 
-    @api.multi
     @api.depends('reg_max', 'reg_current', 'assistance_id')
     def _get_reg_vacancy(self):
         """ Calcula cantidades de alumnas
@@ -156,41 +155,37 @@ class curso_lecture(models.Model):
             rec.reg_vacancy = rec.reg_max - reg_present
 
             # calcular las vacantes para recuperar
-            lim_curso = rec.reg_vacancy     # limitacion por el curso
-            lim_vac = 2 - reg_recover       # limitacion por recuperacion
-            reg_vacancy_rec = min([lim_curso, lim_vac])   # elijo el minimo
+            lim_curso = rec.reg_vacancy  # limitacion por el curso
+            lim_vac = 2 - reg_recover  # limitacion por recuperacion
+            reg_vacancy_rec = min([lim_curso, lim_vac])  # elijo el minimo
 
             rec.reg_vacancy_rec = reg_vacancy_rec if reg_vacancy_rec >= 0 else 0
 
-    @api.multi
     def _get_name_list(self):
         for rec in self:
             rec.name_list = '{} [{}] - clase {} - conf {} - recu {} - ause {} - vac {} -- {}'.format(
-                    datetime.strptime(rec.date, '%Y-%m-%d').strftime('%d/%m/%Y'),
-                    rec.curso_id.curso_instance,
-                    rec.seq,
-                    rec.reg_current,
-                    rec.reg_recover,
-                    rec.reg_absent,
-                    rec.reg_vacancy,
-                    rec.name
+                datetime.strptime(rec.date, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                rec.curso_id.curso_instance,
+                rec.seq,
+                rec.reg_current,
+                rec.reg_recover,
+                rec.reg_absent,
+                rec.reg_vacancy,
+                rec.name
             )
 
-    @api.multi
     @api.depends('date_start')
     def _get_date(self):
         for rec in self:
             dt = datetime.strptime(rec.date_start, '%Y-%m-%d %H:%M:%S')
             rec.date = dt.strftime('%Y-%m-%d')
 
-    @api.multi
     @api.depends('date')
     def _get_weekday(self):
         for rec in self:
             ans = datetime.strptime(rec.date, '%Y-%m-%d')
             rec.weekday = ans.strftime("%A").capitalize()
 
-    @api.multi
     def button_generate_assistance(self):
         """ Pone en el registro de asistencia las alumnas que están cursando, que van a
             cursar o por las dudas también las que cumplieron en curso.
@@ -208,14 +203,14 @@ class curso_lecture(models.Model):
         for rec in self:
             # Alumnas registradas en el curso
             atendees = rec.curso_id.registration_ids.search(
-                    [('state', 'in', ['confirm', 'signed', 'done']),
-                     ('curso_id', '=', rec.curso_id.id)]
+                [('state', 'in', ['confirm', 'signed', 'done']),
+                 ('curso_id', '=', rec.curso_id.id)]
             )
 
             # Alumnas en la lista de presentes, que no son recuperantes
             presents = rec.assistance_id.search(
-                    [('lecture_id', '=', rec.id),
-                     ('recover', '=', False)])
+                [('lecture_id', '=', rec.id),
+                 ('recover', '=', False)])
 
             for atendee in atendees:
                 # Si el atendee no está en los presentes, incluirlo.
@@ -249,4 +244,3 @@ class curso_lecture(models.Model):
                 day=dt.day,
                 hour=dt_stop.hour,
                 minute=dt_stop.minute).strftime(datetime_format)
-
