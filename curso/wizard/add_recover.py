@@ -37,7 +37,6 @@ class add_recover(models.TransientModel):
             required=True,
     )
 
-    @api.multi
     @api.onchange('dummy')
     def onchange_dummy(self):
         """ Esta funcion se dispara al crearse este modelo transitorio """
@@ -52,33 +51,33 @@ class add_recover(models.TransientModel):
 
         return {'domain': {'lecture_id': [('id', 'in', recover_ids)]}}
 
-    @api.one
     def button_add_recover(self):
-        """ En la ficha de la alumna se oprime el botón agregar recuperatorio y se
-            le agrega una clase que se elige de una lista, aparecerán solo las clases
-            que la alumna deba recuperar. Para generar esta lista se analizan las
-            clases que están en estado absent y se buscan las clases de posible
-            recuperatorio para dichas clases.
+        """ En la ficha de la alumna se oprime el botón agregar recuperatorio
+            y se le agrega una clase que se elige de una lista, aparecerán
+            solo las clases que la alumna deba recuperar. Para generar esta
+            lista se analizan las clases que están en estado absent y se
+            buscan las clases de posible recuperatorio para dichas clases.
 
             La clase aregada aparecerá en color verde en estado programmed y
-            funcionará como una clase original a los efectos de dar el presente,
-            Salvo que tendrá tildada la casilla Recuperatorio. La clase original
-            que estaba en estado absent se pasa a estado to_recover
+            funcionará como una clase original a los efectos de dar el
+            presente, Salvo que tendrá tildada la casilla Recuperatorio.
+            La clase original que estaba en estado absent se pasa a estado
+            to_recover
 
-            Se genera una factura por $130 para el cobro de la clase de recuperatorio.
-            La proxima vez que se abra esta vista se verá la leyenda "Nos debe $130"
+            Se genera una factura por $130 para el cobro de la clase de
+            recuperatorio. La proxima vez que se abra esta vista se verá la
+            leyenda "Nos debe $130"
         """
-
-        #  obtener el id de la alumna que viene en el contexto
-        ids = self._context.get('active_ids')
-        partner_id = self.env['res.partner'].browse(ids[0])
-        assistance_obj = self.env['curso.assistance']
-        assistance_obj.add_atendee(partner_id, self.lecture_id, recover=True)
-
-        # generar la factura
-        self.lecture_id.curso_id.do_invoice(
-                130,
-                self.lecture_id.curso_id.curso_instance,
-                self.lecture_id.seq,
-                partner_id)
-
+        for rec in self:
+            #  obtener el id de la alumna que viene en el contexto
+            ids = self._context.get('active_ids')
+            partner_id = self.env['res.partner'].browse(ids[0])
+            assistance_obj = self.env['curso.assistance']
+            assistance_obj.add_atendee(partner_id, rec.lecture_id,
+                                       recover=True)
+            # generar la factura
+            rec.lecture_id.curso_id.do_invoice(
+                    130,
+                    rec.lecture_id.curso_id.curso_instance,
+                    rec.lecture_id.seq,
+                    partner_id)

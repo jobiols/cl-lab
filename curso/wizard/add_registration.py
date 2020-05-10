@@ -48,22 +48,21 @@ class add_registration(models.TransientModel):
             'Origen', required=True,
             default='none')
 
-    @api.one
     def button_add_curso(self):
         """ Agrega un curso a la ficha de la alumna, y la pone como interesada
         """
         #  obtener el id de la alumna que viene en el contexto
         partner_ids = self._context.get('active_ids')
-
-        # Crear la inscripcion y agregarla
-        vals = {
-            'curso_id': self.curso_id.id,
-            'partner_id': partner_ids[0],
-            'user_id': self._uid,
-            'discount': self.discount,
-            'disc_desc': self.disc_desc,
-        }
-        self.env['curso.registration'].create(vals)
+        for rec in self:
+            # Crear la inscripcion y agregarla
+            vals = {
+                'curso_id': rec.curso_id.id,
+                'partner_id': partner_ids[0],
+                'user_id': self._uid,
+                'discount': rec.discount,
+                'disc_desc': rec.disc_desc,
+            }
+            self.env['curso.registration'].create(vals)
 
     # TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
     @api.onchange('source')

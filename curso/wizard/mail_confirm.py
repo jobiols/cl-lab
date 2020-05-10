@@ -25,7 +25,6 @@ class mail_confirm(models.TransientModel):
     """Mail Confirmation"""
     _name = "curso.mail.confirm"
 
-    @api.multi
     def confirm(self):
         """ Intentar enviar mail a todas las alumnas que tengo
         """

@@ -29,9 +29,9 @@ class prepare_mass_mail(models.TransientModel):
 
     category_id = fields.Many2one('res.partner.category', string='Tags')
 
-    @api.multi
     def button_prepare(self):
-        """ agrega la etiqueta seleccionada a todos los partners que estan seleccionados
+        """ agrega la etiqueta seleccionada a todos los partners que estan
+            seleccionados
         """
         regs = self.env['curso.registration'].browse(self._context['active_ids'])
         for reg in regs:

@@ -23,7 +23,6 @@ from openerp import api, models
 class CursoReportIncoming(models.AbstractModel):
     _name = 'report.curso.curso_report_incoming'
 
-    @api.multi
     def render_html(self, data=None):
         report_obj = self.env['report']
         report = report_obj._get_report_from_name('curso.curso_report_incoming')
@@ -35,7 +34,6 @@ class CursoReportIncoming(models.AbstractModel):
         }
         return report_obj.render('curso.curso_report_incoming', docargs)
 
-    @api.one
     def _get_products(self):
         prod = self.env['product.product'].search([('type', '=', 'curso')])
         #        print 'cantidad de cursos', len(prod.curso_instances)

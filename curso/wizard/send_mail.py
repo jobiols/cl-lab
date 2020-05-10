@@ -31,15 +31,15 @@ class send_mail(models.TransientModel):
             help=u'Plantilla de mail que se enviará',
     )
 
-    @api.one
     @api.onchange('template')
     def _get_default_template(self):
-        template = self.env['email.template'].search(
-                [('id', '=', self._context.get('template'))]
-        )
-        self.template = template
+        for rec in self:
+            template = self.env['email.template'].search(
+                    [('id', '=', self._context.get('template'))]
+            )
+            rec.template = template
 
-    @api.one
     def button_send_mail(self):
-        if self.template:
-            self.template.send_mail(self._context.get('registration'))
+        for rec in self:
+            if rec.template:
+                rec.template.send_mail(self._context.get('registration'))
