@@ -12,14 +12,6 @@
             </field>
         </record>
 
-        <!-- Top menu item -->
-        <menuitem name="Cursos"
-                  id="curso_main_menu"
-                  groups="curso.group_curso_manager,curso.group_curso_user"
-                  sequence="115"/>
-        <menuitem name="Organización de cursos"
-                  id="base.menu_curso_main" parent="curso_main_menu"/>
-
         <!-- Cursos  -->
 
         <!-- Cursos Form View -->

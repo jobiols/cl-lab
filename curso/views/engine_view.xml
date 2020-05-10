@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-        <!--
-        ++++++++++++++++++++================================================================================================
-         Feriados
-        -->
+        <!-- ===================================================== Feriados -->
         <!--                                        Feriados Form View
         -->
-        <record model="ir.ui.view" id="view_curso_feriado_form">
-            <field name="name">Feriados</field>
+        <record id="view_curso_feriado_form" model="ir.ui.view">
+            <field name="name">CURSO Feriados form</field>
             <field name="model">curso.holiday</field>
             <field name="arch" type="xml">
                 <form string="Planilla de feriados">
@@ -30,8 +27,8 @@
 
         <!--                                        Feriados Tree View
         -->
-        <record model="ir.ui.view" id="view_curso_feriado_tree">
-            <field name="name">Feriados</field>
+        <record id="view_curso_feriado_tree" model="ir.ui.view" >
+            <field name="name">CURSO Feriados tree</field>
             <field name="model">curso.holiday</field>
             <field name="arch" type="xml">
                 <tree string="Plantilla de feriados">
@@ -49,21 +46,20 @@
         <record id="action_curso_feriado" model="ir.actions.act_window">
             <field name="name">Feriados</field>
             <field name="res_model">curso.holiday</field>
+<!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
         </record>
 
         <!--                                        Feriados Menu
         -->
         <menuitem name="Feriados"
-                  id="menu_curso_feriado" parent="base.menu_curso_main"
-                  action="action_curso_feriado" groups="curso.group_curso_manager,curso.group_curso_user"/>
+                  id="menu_curso_feriado" parent="curso.menu_curso_main"
+                  action="action_curso_feriado"
+                  groups="curso.group_curso_manager,curso.group_curso_user"/>
 
 
-        <!--
-        ====================================================================================================================
-        Horarios
-        -->
-
+        <!-- ===================================================== Horarios -->
         <!--                                    Horarios Form View
         -->
         <record model="ir.ui.view" id="view_curso_horario_form">
@@ -100,25 +96,23 @@
         <record model="ir.actions.act_window" id="action_curso_horario">
             <field name="name">Horarios</field>
             <field name="res_model">curso.schedule</field>
+<!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
         </record>
 
         <!--                                        Horarios Menu
         -->
         <menuitem name="Horarios"
-                  id="menu_curso_horario" parent="base.menu_curso_main"
+                  id="menu_curso_horario" parent="curso.menu_curso_main"
                   action="action_curso_horario" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
-
-        <!--
-        ================================================================================================================
-        Cuotas
-        -->
+        <!-- ======================================================= Cuotas -->
 
         <!--                                    Quota Form View
         -->
-        <record model="ir.ui.view" id="view_curso_quota_form">
-            <field name="name">Cuotas</field>
+        <record id="view_curso_quota_form" model="ir.ui.view">
+            <field name="name">CURSO Definicion de Cuotas</field>
             <field name="model">curso.quota</field>
             <field name="arch" type="xml">
                 <form string="Planilla de cuotas">
@@ -137,17 +131,16 @@
 
         <!--                         Quota Tree View
         -->
-        <record model="ir.ui.view" id="view_curso_quota_tree">
-            <field name="name">Cuotas</field>
+        <record id="view_curso_quota_tree" model="ir.ui.view" >
+            <field name="name">CURSO Cuotas tree</field>
             <field name="model">curso.quota</field>
             <field name="arch" type="xml">
                 <tree string="lista de cuotas"
-                      fonts="bold:state=='Pagado'"
-                      colors="grey:state=='Pendiente';
-                              green:state=='Pagado';
-                              red:state=='Abierto';
-                              black:state=='Borrador'">
-                    <field name="curso_inst"/>
+                      decoration-bf="state=='Pagado'"
+                      decoration-muted="state=='Pendiente'"
+                      decoration-success="state=='Pagado'"
+                      decoration-danger="state=='Abierto'"
+                      decoration-warning="state=='Borrador'">
                     <field name="partner_id"/>
                     <field name="date"/>
                     <field name="invoice_id"/>
@@ -161,8 +154,9 @@
         <!--                             Quota Search View
         -->
 
+<!-- TODO arreglar el search view
         <record model="ir.ui.view" id="view_quota_search">
-            <field name="name">Cuotas</field>
+            <field name="name">CURSO Cuotas search</field>
             <field name="model">curso.quota</field>
             <field name="arch" type="xml">
                 <search string="Cuotas">
@@ -176,7 +170,7 @@
                 </search>
             </field>
         </record>
-
+-->
         <!--                           Cuotas Calendar view
         -->
 
@@ -198,13 +192,13 @@
             <field name="name">Cuotas</field>
             <field name="res_model">curso.quota</field>
             <field name="view_mode">tree,form,calendar</field>
+    <!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
         </record>
 
-        <!--                                        Clases Menu
-        -->
         <menuitem name="Cuotas"
-                  id="menu_curso_quota" parent="base.menu_curso_main"
+                  id="menu_curso_quota" parent="curso.menu_curso_main"
                   action="action_curso_quota" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
     </data>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top menu item -->
+    <data>
+        <menuitem id="curso_main_menu"
+                  name="Cursos"
+                  sequence="10"
+                  web_icon="curso,static/description/icon.png"
+        />
+
+        <menuitem name="Organización de cursos"
+                  id="curso.menu_curso_main" parent="curso_main_menu"
+        />
+
+    </data>
+</odoo>
