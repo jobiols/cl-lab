@@ -11,7 +11,7 @@ class CursoWooCateg(models.Model):
     _order = 'woo_idx,slug'
 
     path = fields.Char(
-        compute="get_path",
+        compute="_compute_path",
         store=True
     )
 
@@ -19,11 +19,11 @@ class CursoWooCateg(models.Model):
     )
 
     woo_ids = fields.Char(
-        compute="get_woo_ids"
+        compute="_compute_woo_ids"
     )
 
     woo_idx = fields.Integer(
-        compute="get_woo_idx",
+        compute="_compute_woo_idx",
         store=True
     )
 
@@ -42,7 +42,6 @@ class CursoWooCateg(models.Model):
         help=u'Indica si se publica en tienda nube'
     )
 
-    @api.multi
     def _path(self):
         for cat in self:
             if cat.parent:
@@ -50,23 +49,23 @@ class CursoWooCateg(models.Model):
             else:
                 return cat.name
 
-    @api.one
     @api.depends('parent', 'name')
-    def get_path(self):
-        self.path = self._path()
+    def _compute_path(self):
+        for rec in self:
+            rec.path = rec._path()
 
-    @api.one
-    def get_woo_ids(self):
-        ids = []
-        ids.append(self.nube_id)
-        if self.parent:
-            ids.append(self.parent.nube_id)
-            if self.parent.parent:
-                ids.append(self.parent.parent.nube_id)
-        self.woo_ids = ids
+    def _compute_woo_ids(self):
+        for rec in self:
+            ids = []
+            ids.append(rec.nube_id)
+            if rec.parent:
+                ids.append(rec.parent.nube_id)
+                if rec.parent.parent:
+                    ids.append(rec.parent.parent.nube_id)
+            rec.woo_ids = ids
 
-    @api.one
     @api.depends('woo_ids')
-    def get_woo_idx(self):
-        ids = eval(self.woo_ids)
-        self.woo_idx = len(ids)
+    def _compute_woo_idx(self):
+        for rec in self:
+            ids = eval(rec.woo_ids)
+            rec.woo_idx = len(ids)

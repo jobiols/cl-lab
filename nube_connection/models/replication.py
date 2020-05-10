@@ -16,7 +16,6 @@ class NubeReplication(models.Model):
 
     )
 
-    @api.multi
     def new_record(self, model, id_rep):
         """ Agrega un registro para replicar pero sin repetirlo
         """

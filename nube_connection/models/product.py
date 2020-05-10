@@ -107,7 +107,6 @@ class ProductProduct(models.Model):
 
         return res
 
-    @api.multi
     @api.depends('published', 'image_medium', 'description', 'woo_categ_ids',
                  'state')
     def _compute_do_published(self):
@@ -119,7 +118,6 @@ class ProductProduct(models.Model):
                 ret.woo_categ_ids and \
                 ret.state == 'sellable'
 
-    @api.multi
     def copy(self, default=None):
         self.ensure_one()
 
@@ -129,7 +127,6 @@ class ProductProduct(models.Model):
         default['nube_id'] = 0
         return super(ProductProduct, self).copy(default=default)
 
-    @api.multi
     def get_woo_categs(self):
         """ Obtiene las categorias tienda nube de este producto esto se accede
             por xmlrpc al subir el producto a la tienda
@@ -141,7 +138,6 @@ class ProductProduct(models.Model):
 
         return ret
 
-    @api.multi
     def write(self, vals):
         """ Registrar el registro para replicar si corresponde
         """
