@@ -40,7 +40,7 @@
         'wizard/mail_confirm_view.xml',
         'views/curso_menuitem.xml',
         'views/curso_view.xml',
-#        'views/registration_view.xml',
+        'views/registration_view.xml',
 
         'views/engine_view.xml',
         'views/lectures_view.xml',

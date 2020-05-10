@@ -430,11 +430,11 @@
             -->
 
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
+                <p class="o_view_nocontent_smiling_face">
                     Click para agregar un nuevo curso.
                 </p>
                 <p>
-                    OpenERP te ayuda a planificar en forma eficiente tus cursos:
+                    Odoo te ayuda a planificar en forma eficiente tus cursos:
                     hacer el seguimiento de las suscripciones, automatizar la confirmación
                     de los cursos por mail
                     seguir la cantidad de vacantes por curso etc. etc.

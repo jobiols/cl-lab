@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
+<!--
 
+        TODO esto no funciona, ver que hace
         <act_window
                 id="act_register_curso_partner"
                 name="Subscribe"
@@ -10,10 +12,10 @@
                 view_mode="tree,form,calendar,graph"
                 context="{'search_default_partner_id': [active_id], 'default_partner_id': active_id}"
                 view_type="form"/>
-
+-->
         <menuitem name="Cursos"
                   id="menu_curso_curso" action="action_curso_view"
-                  parent="base.menu_curso_main"/>
+                  parent="menu_curso_main"/>
 
         <!-- Registration tree view  -->
 
@@ -105,12 +107,16 @@
                         <group>
                             <field name="quota_id" colspan="4" nolabel="1"
                                    groups="curso.group_curso_manager,curso.group_curso_user">
-                                <tree string="lista de cuotas"
+                                <tree string="lista de cuotas">
+
+<!-- TODO Agregarle los colores
                                       fonts="bold:state=='Pagado'"
                                       colors="grey:state=='Pendiente';
                                               green:state=='Pagado';
                                               red:state=='Abierto';
                                               black:state=='Borrador'">
+-->
+
                                     <field name="curso_inst"/>
                                     <field name="date"/>
                                     <field name="amount"/>
@@ -120,10 +126,13 @@
                             </field>
                         </group>
                     </sheet>
+
+
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
+
                 </form>
             </field>
         </record>
@@ -154,14 +163,14 @@
             </field>
         </record>
 
-        <!--  Registration Search view-->
+        <!--  Registration Search view
+        TODO arreglar la search view
 
         <record model="ir.ui.view" id="view_registration_search">
             <field name="name">Inscripciones</field>
             <field name="model">curso.registration</field>
             <field name="arch" type="xml">
                 <search string="Inscripciones en cursos">
-                    <!--                    <field name="name" string="Participant" filter_domain="['|','|',('name','ilike',self),('email','ilike',self)]"/> -->
                     <separator/>
                     <filter icon="terp-check" string="Interesadas" name="draft"
                             domain="[('state','=','draft')]"
@@ -194,21 +203,25 @@
                 </search>
             </field>
         </record>
-
+-->
         <!-- Registrations -->
 
         <record model="ir.actions.act_window" id="action_registration">
             <field name="name">Inscripciones</field>
             <field name="res_model">curso.registration</field>
+            <!-- TODO ver que es esto
             <field name="view_type">form</field>
+            -->
             <field name="domain"></field>
             <field name="view_mode">tree,form,calendar,graph</field>
             <field name="context">{}</field>
+            <!-- TODO devolver esto cuando anda la vista search
             <field name="search_view_id" ref="view_registration_search"/>
+            -->
         </record>
 
         <menuitem name="Inscripciones"
-                  id="menu_action_registration" parent="base.menu_curso_main"
+                  id="menu_action_registration" parent="menu_curso_main"
                   action="action_registration"
                   groups="curso.group_curso_manager,curso.group_curso_user"/>
 

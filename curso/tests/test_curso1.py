@@ -154,7 +154,7 @@ class TestCurso(TransactionCase):
         self.registration_1 = self.registration_obj.create(vals)
 
         # chequeando generacion de plantillas
-        ##################################################################################
+        #######################################################################
         self.assertEqual(self.schedule1.formatted_start_time, u'12:30',
                          'Falla formatted_start_time')
         self.assertEqual(self.registration_1.get_formatted_begin_date()[-10:],
@@ -183,7 +183,7 @@ class TestCurso(TransactionCase):
     def test_generate_html_02(self):
         """ Chequea generación de html """
         # creo el producto SPR
-        ##################################################################################
+        #######################################################################
         self.product1 = self.product_obj.create({
             'tot_hs_lecture': 80,
             'hs_lecture': 4,
