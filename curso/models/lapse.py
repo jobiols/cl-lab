@@ -26,32 +26,33 @@ class curso_lapse(models.Model):
     _name = 'curso.lapse'
 
     start_time = fields.Float(
-            string='Desde',
-            required=True
+        string='Desde',
+        required=True
     )
 
     formatted_start_time = fields.Char(
-            compute='_compute_start_time'
+        compute='_compute_start_time'
     )
 
     end_time = fields.Float(
-            string='Hasta',
-            required=True
+        string='Hasta',
+        required=True
     )
 
     elapsed_time = fields.Float(
-            compute='_elapsed_time',
-            string='Duración'
+        compute='_compute_elapsed_time',
+        string='Duración'
     )
 
-    @api.one
-    def _elapsed_time(self):
-        self.elapsed_time = self.end_time - self.start_time
+    def _compute_elapsed_time(self):
+        for rec in self:
+            rec.elapsed_time = rec.end_time - rec.start_time
 
     @api.depends('start_time')
-    @api.one
     def _compute_start_time(self):
-        t = self.start_time
-        mm = t - int(t)
-        hh = t - mm
-        self.formatted_start_time = "{:0>2d}:{:0>2d}".format(int(hh), int(mm * 60))
+        for rec in self:
+            t = rec.start_time
+            mm = t - int(t)
+            hh = t - mm
+            rec.formatted_start_time = "{:0>2d}:{:0>2d}".format(int(hh),
+                                                                int(mm * 60))

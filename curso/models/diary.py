@@ -30,60 +30,52 @@ class curso_diary(models.Model):
     _order = 'seq'
 
     curso_id = fields.Many2one(
-            'curso.curso',
-            'Curso'
+        'curso.curso',
+        'Curso'
     )
 
-    weekday = fields.Selection(
-            selection="_get_day",
-            required=True,
-            string=u'Día'
+    weekday = fields.Selection([
+        ('0', u'Domingo'),
+        ('1', u'Lunes'),
+        ('2', u'Martes'),
+        ('3', u'Miércoles'),
+        ('4', u'Jueves'),
+        ('5', u'Viernes'),
+        ('6', u'Sábado')
+    ],
+        required=True,
+        string=u'Día'
     )
 
     weekday_name = fields.Char(
-            compute="_get_day_name",
-            string=u'Nombre del dia'
+        compute="_compute_weekday_name",
+        string=u'Nombre del dia'
     )
 
     schedule = fields.Many2one(
-            'curso.schedule',
-            u'Horario'
+        'curso.schedule',
+        u'Horario'
     )
 
     seq = fields.Integer(
-            u'Secuencia'
+        u'Secuencia'
     )
 
-    def _get_day(self):
-        """
-        Dias para el drop down box
-        """
-        return (
-            ('0', u'Domingo'),
-            ('1', u'Lunes'),
-            ('2', u'Martes'),
-            ('3', u'Miércoles'),
-            ('4', u'Jueves'),
-            ('5', u'Viernes'),
-            ('6', u'Sábado')
-        )
-
     def check_weekday(self, date):
-        """ Chequear que la fecha corresponda al dia del primer elemento de la agenda
-            devolver false si no es cierto
+        """ Chequear que la fecha corresponda al dia del primer elemento de
+            la agenda devolver false si no es cierto
         """
         return self.weekday == datetime.strptime(date, '%Y-%m-%d').strftime('%w')
 
-    @api.one
-    def _get_day_name(self):
-        dwd = {
-            '0': u'Domingo',
-            '1': u'Lunes',
-            '2': u'Martes',
-            '3': u'Miércoles',
-            '4': u'Jueves',
-            '5': u'Viernes',
-            '6': u'Sábado'
-        }
-        self.weekday_name = dwd[self.weekday]
-
+    def _compute_weekday_name(self):
+        for rec in self:
+            dwd = {
+                '0': u'Domingo',
+                '1': u'Lunes',
+                '2': u'Martes',
+                '3': u'Miércoles',
+                '4': u'Jueves',
+                '5': u'Viernes',
+                '6': u'Sábado'
+            }
+            rec.weekday_name = dwd[rec.weekday]

@@ -31,25 +31,23 @@ class curso_schedule(models.Model):
         ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
 
     name = fields.Char(
-            compute="_get_name",
-            store=True
+        compute="_get_name",
+        store=True
     )
 
-    @api.one
-    def _calc_datetime(self, _date, _time):
-
+    @staticmethod
+    def _calc_datetime(_date, _time):
         mm = _time - int(_time)
         hh = int(_time - mm)
         mm = int(mm * 60)
 
-        tt = datetime(_date.year, _date.month, _date.day, hh, mm, tzinfo=None)
+        tt = datetime(_date.year, _date.month,
+                      _date.day, hh, mm, tzinfo=None)
 
         # aca sumamos tres horas porque es UTC
         # el campo le resta tres horas.
         tt = tt + timedelta(hours=3)
-        b = tt.strftime("%Y-%m-%d %H:%M:%S")
-
-        return b
+        return tt.strftime("%Y-%m-%d %H:%M:%S")
 
     def start_datetime(self, date):
         return self._calc_datetime(date, self.start_time)
@@ -57,12 +55,14 @@ class curso_schedule(models.Model):
     def stop_datetime(self, date):
         return self._calc_datetime(date, self.end_time)
 
-    def _f2h(self, t):
+    @staticmethod
+    def _f2h(t):
         mm = t - int(t)
         hh = t - mm
         return "{:0>2d}:{:0>2d}".format(int(hh), int(mm * 60))
 
-    def _f2hh_mm(self, t):
+    @staticmethod
+    def _f2hh_mm(t):
         mm = t - int(t)
         hh = t - mm
         mm *= 60
@@ -72,10 +72,10 @@ class curso_schedule(models.Model):
             res = "{}hs {}min".format(int(hh), int(mm))
         return res
 
-    @api.one
     @api.depends('start_time', 'end_time')
     def _get_name(self):
-        aa = self._f2h(self.start_time)
-        bb = self._f2h(self.end_time)
-        cc = self._f2hh_mm(self.end_time - self.start_time)
-        self.name = "{} - {} ({})".format(aa, bb, cc)
+        for rec in self:
+            aa = self._f2h(rec.start_time)
+            bb = self._f2h(rec.end_time)
+            cc = self._f2hh_mm(rec.end_time - rec.start_time)
+            rec.name = "{} - {} ({})".format(aa, bb, cc)
