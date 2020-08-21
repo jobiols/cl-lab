@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-#    Copyright (C) 2019  jeo Software  (http://www.jeosoft.com.ar)
+#    Copyright (C) 2020  jeo Software  (http://www.jeosoft.com.ar)
 #    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -63,42 +63,37 @@
     # list of url repos to install in the form 'repo-url directory'
     'git-repos': [
         'git@github.com:jobiols/cl-lab.git',
-        'https://github.com/OCA/knowledge.git',
-#        {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '12.0'},
-#        {'usr': 'jobiols', 'repo': 'jeo-enterprise', 'branch': '12.0'},
+        'git@github.com:jobiols/jeo-enterprise.git',
+        
+        # contiene standard depends
+        'https://github.com/jobiols/odoo-addons.git',
 
-#        {'usr': 'jobiols', 'repo': 'odoo-etl', 'branch': '12.0'},
+        # Adhoc para localizacion
+        'https://github.com/ingadhoc/odoo-argentina.git',
+        'https://github.com/ingadhoc/miscellaneous',
+        'https://github.com/ingadhoc/account-financial-tools',
+        'https://github.com/ingadhoc/sale',
+        'https://github.com/ingadhoc/product',
+        'https://github.com/ingadhoc/argentina-sale',
+        'https://github.com/ingadhoc/account-payment',
+        'https://github.com/ingadhoc/stock',
+        
+        # oca para localizacion
+        'https://github.com/oca/web',
 
-#        {'usr': 'ingadhoc', 'repo': 'odoo-argentina', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'argentina-sale', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'account-financial-tools',         'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'account-payment', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'miscellaneous', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'argentina-reporting',         'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'reporting-engine', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'aeroo_reports', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'sale', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'odoo-support', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'product', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'stock', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'account-invoicing', 'branch': '12.0'},
-#        {'usr': 'ingadhoc', 'repo': 'patches', 'branch': '12.0'},
+        # otros repositorios adicionales ADHOC
+        ###########################################################
+        'https://github.com/ingadhoc/website',
+        'https://github.com/ingadhoc/partner',
+        'https://github.com/ingadhoc/account-invoicing',
 
-#        {'usr': 'oca', 'repo': 'partner-contact', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'web', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'server-tools', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'social', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'server-ux', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'server-brand', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'manufacture', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'manufacture-reporting', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'management-system', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'sale-workflow', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'stock-logistics-warehouse', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'stock-logistics-reporting', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'stock-logistics-workflow', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'queue', 'branch': '12.0'},
-#        {'usr': 'oca', 'repo': 'knowledge', 'branch': '12.0'},
+        # otros repositorios adicionales OCA
+        ###########################################################
+        'https://github.com/oca/partner-contact',
+        'https://github.com/oca/sale-workflow',
+        'https://github.com/oca/server-ux',
+        'https://github.com/oca/contract',
+        'https://github.com/oca/stock-logistics-workflow.git',
     ],
 
     'docker-images': [

@@ -71,7 +71,7 @@
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
-    'installable': True,
+    'installable': False,
     'application': True,
     'auto_install': False,
     'images': [],
