@@ -62,7 +62,7 @@
 
     # list of url repos to install in the form 'repo-url directory'
     'git-repos': [
-        'git@github.com:jobiols/cl-lab.git',
+        'https://github.com/jobiols/cl-lab.git',
         'git@github.com:jobiols/jeo-enterprise.git',
         
         # contiene standard depends
