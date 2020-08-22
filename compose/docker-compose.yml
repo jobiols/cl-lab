@@ -1,6 +1,6 @@
 # Compose file odoo makeoverlab + https
 # Ojo hay que crear el /odoo_ar/traefik/acme.json y ponerle chmod 600
-# Version 2020-08-09
+# Version 2020-08-22
 #################################################################################
 
 version: '3.5'
@@ -16,18 +16,18 @@ services:
 
       #- --log.level=DEBUG # Don't do that in production
       - --providers.docker
-      - --api.insecure # Don't do that in production
-      - --api.debug # Don't do that in production
+      # - --api.insecure # Don't do that in production
+      # - --api.debug # Don't do that in production
 
       - --certificatesresolvers.le.acme.email=jorge.obiols@gmail.com
       - --certificatesresolvers.le.acme.storage=/opt/traefik/acme.json
       - --certificatesresolvers.le.acme.httpChallenge=true
       - --certificatesresolvers.le.acme.httpChallenge.entryPoint=web
-        #      - --certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # descoment for staging
+      # - --certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # descoment for staging
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      # - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /odoo_ar/traefik/:/opt/traefik/
@@ -40,7 +40,7 @@ services:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
     volumes:
-      - /odoo_ar/odoo-13.0e/lab/postgresql:/var/lib/postgresql/data
+      - postgresql:/var/lib/postgresql/data
 
   odoo:
     image: jobiols/odoo-ent:13.0e
@@ -48,7 +48,7 @@ services:
     restart: unless-stopped
     volumes:
       - /odoo_ar/odoo-13.0e/lab/config:/opt/odoo/etc/
-      - /odoo_ar/odoo-13.0e/lab/data_dir:/opt/odoo/data
+      - data_dir:/opt/odoo/data
       - /odoo_ar/odoo-13.0e/lab/log:/var/log/odoo
       - /odoo_ar/odoo-13.0e/lab/sources:/opt/odoo/custom-addons
       - /odoo_ar/odoo-13.0e/lab/backup_dir:/var/odoo/backups/
@@ -97,24 +97,22 @@ services:
       - traefik.http.routers.rou-chat-secure.service=srv-chat-secure
       - traefik.http.services.srv-chat-secure.loadbalancer.server.port=8072
 
-  # netdata:
-  #   image: netdata/netdata
-  #   container_name: netdata
-  #   restart: unless-stopped
-  #   ports:
-  #     - 19999:19999
-  #   cap_add:
-  #     - SYS_PTRACE
-  #   security_opt:
-  #     - apparmor:unconfined
-  #   volumes:
-  #     - /proc:/host/proc:ro
-  #     - /sys:/host/sys:ro
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #   environment:
-  #     - PGID=998  
-
-
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    restart: unless-stopped
+    ports:
+      - 19999:19999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PGID=998  
 
       # obtener el PGID
       # grep docker /etc/group | cut -d ':' -f 3
@@ -129,3 +127,7 @@ services:
 
         #networks:
         #  default:
+
+volumes:
+  postgresql:
+  data_dir:
