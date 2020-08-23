@@ -124,3 +124,6 @@ services:
 volumes:
   postgresql:
   data_dir:
+  netdatalib:
+  netdatacache:
+
