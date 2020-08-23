@@ -1,4 +1,4 @@
-# Compose file odoo makeoverlab + https
+# Compose file odoo lab (makeoverlab) + https
 # Ojo hay que crear el /odoo_ar/traefik/acme.json y ponerle chmod 600
 # Version 2020-08-22
 #################################################################################
@@ -54,7 +54,6 @@ services:
       - /odoo_ar/odoo-13.0e/lab/backup_dir:/var/odoo/backups/
     links:
       - postgres:db
-
     labels:
       # router rou-odoo --> Acceso a odoo en puerto 80
       - traefik.http.routers.rou-odoo.rule=Host(`staging.jeosoft.com.ar`)
