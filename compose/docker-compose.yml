@@ -2,6 +2,7 @@
 # Ojo hay que crear el /odoo_ar/traefik/acme.json y ponerle chmod 600
 # Version 2020-08-22
 #################################################################################
+# Netdata visible en puerto :19999
 
 version: '3.5'
 
