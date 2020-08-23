@@ -111,7 +111,7 @@ services:
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - PGID=998  
+      - PGID=999  
 
       # obtener el PGID
       # grep docker /etc/group | cut -d ':' -f 3
