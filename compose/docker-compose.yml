@@ -13,6 +13,7 @@ services:
     command:
       - --entrypoints.web.address=:80
       - --entryPoints.websecure.address=:443
+      - --entryPoints.webnetdata.address=:19999
 
       #- --log.level=DEBUG # Don't do that in production
       - --providers.docker
@@ -27,6 +28,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - 19999:19999
       # - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -116,25 +118,9 @@ services:
       - PGID=999  
 
     labels:
-      # router rou-netdata --> Acceso a netdata en puerto 80
-      - traefik.http.routers.rou-netdata.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/netdata`)
-      - traefik.http.routers.rou-netdata.entrypoints=web
-      - traefik.http.routers.rou-netdata.service=srv-netdata-secure
-
-      # redireccion a puerto 443
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
-      - traefik.http.routers.rou-netdata.middlewares=redirect-to-https@docker
-
-      # router rou-netdata-secure --> Acceso a netdata en puerto 443
-      - traefik.http.routers.rou-netdata-secure.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/netdata`)
-      - traefik.http.routers.rou-netdata-secure.tls=true
-      - traefik.http.routers.rou-netdata-secure.tls.certresolver=le
-      - traefik.http.routers.rou-netdata-secure.entrypoints=websecure
-
-      # Redirecciona rou-netdata-secure al puerto 19999 donde escucha netdata
-      - traefik.http.routers.rou-netdata-secure.service=srv-netdata-secure
-      - traefik.http.services.srv-netdata-secure.loadbalancer.server.port=19999
+      # router rou-netdata --> Acceso a netdata en puerto 19999
+      - traefik.http.routers.rou-netdata.rule=Host(`staging.jeosoft.com.ar`)
+      - traefik.http.routers.rou-netdata.entrypoints=webnetdata
 
 volumes:
   postgresql:
