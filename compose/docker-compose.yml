@@ -122,6 +122,8 @@ services:
       - traefik.http.routers.rou-netdata.service=srv-netdata-secure
 
       # redireccion a puerto 443
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       - traefik.http.routers.rou-netdata.middlewares=redirect-to-https@docker
 
       # router rou-netdata-secure --> Acceso a netdata en puerto 443
