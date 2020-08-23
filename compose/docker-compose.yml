@@ -111,21 +111,27 @@ services:
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
+      # obtener el PGID para exponer los nombres de los contenedores
+      # grep docker /etc/group | cut -d ':' -f 3
       - PGID=999  
 
-      # obtener el PGID
-      # grep docker /etc/group | cut -d ':' -f 3
-    # labels:
-    #   # router rou-netdata --> Acceso a netdata en puerto 80
-    #   - traefik.http.routers.rou-netdata.rule=(  Method(`GET`) || Method(`POST`) || Method(`PUT`)   ) && Path(`/netdata`)
-    #   - traefik.http.routers.rou-netdata.entrypoints=web
+    labels:
+      # router rou-netdata --> Acceso a netdata en puerto 80
+      - traefik.http.routers.rou-netdata.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/netdata`)
+      - traefik.http.routers.rou-netdata.entrypoints=web
 
-    #   # Redirecciona rou-odoo al puert 19999 donde escucha netdata
-    #   - traefik.http.routers.rou-netdata.service=srv-netdata
-    #   - traefik.http.services.srv-netdata.loadbalancer.server.port=19999
+      # redireccion a puerto 443
+      - traefik.http.routers.rou-netdata.middlewares=redirect-to-https@docker
 
-        #networks:
-        #  default:
+      # router rou-netdata-secure --> Acceso a netdata en puerto 443
+      - traefik.http.routers.rou-netdata-secure.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/netdata`)
+      - traefik.http.routers.rou-netdata-secure.tls=true
+      - traefik.http.routers.rou-netdata-secure.tls.certresolver=le
+      - traefik.http.routers.rou-netdata-secure.entrypoints=websecure
+
+      # Redirecciona rou-netdata-secure al puerto 19999 donde escucha netdata
+      - traefik.http.routers.rou-netdata-secure.service=srv-netdata-secure
+      - traefik.http.services.srv-netdata-secure.loadbalancer.server.port=19999
 
 volumes:
   postgresql:
