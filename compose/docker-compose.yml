@@ -98,24 +98,25 @@ services:
       - traefik.http.routers.rou-chat-secure.service=srv-chat-secure
       - traefik.http.services.srv-chat-secure.loadbalancer.server.port=8072
 
-  netdata:
-    image: netdata/netdata
-    container_name: netdata
-    restart: unless-stopped
-    ports:
-      - 19999:19999
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - netdatalib:/var/lib/netdata
-      - netdatacache:/var/cache/netdata
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
+  # netdata:
+  #   image: netdata/netdata
+  #   container_name: netdata
+  #   restart: unless-stopped
+  #   ports:
+  #     - 19999:19999
+  #   cap_add:
+  #     - SYS_PTRACE
+  #   security_opt:
+  #     - apparmor:unconfined
+  #   volumes:
+  #     - netdatalib:/var/lib/netdata
+  #     - netdatacache:/var/cache/netdata
+  #     - /etc/passwd:/host/etc/passwd:ro
+  #     - /etc/group:/host/etc/group:ro
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /etc/os-release:/host/etc/os-release:ro
+
     #labels:
       # router rou-netdata --> Acceso a netdata en puerto 19999
 #      - traefik.http.routers.rou-netdata.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/netdata`)
