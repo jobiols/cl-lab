@@ -64,7 +64,7 @@
     'git-repos': [
         'https://github.com/jobiols/cl-lab.git',
         'git@github.com:jobiols/jeo-enterprise.git',
-        
+
         # contiene standard depends
         'https://github.com/jobiols/odoo-addons.git',
 
@@ -77,7 +77,7 @@
         'https://github.com/ingadhoc/argentina-sale',
         'https://github.com/ingadhoc/account-payment',
         'https://github.com/ingadhoc/stock',
-        
+
         # oca para localizacion
         'https://github.com/oca/web',
 
