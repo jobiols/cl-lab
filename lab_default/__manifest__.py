@@ -94,6 +94,10 @@
         'https://github.com/oca/server-ux',
         'https://github.com/oca/contract',
         'https://github.com/oca/stock-logistics-workflow.git',
+
+
+        # para la migracion consulting
+        'https://github.com/jobiols/odoo-etl.git'
     ],
 
     'docker-images': [
