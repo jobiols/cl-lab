@@ -45,7 +45,7 @@ services:
       - postgresql:/var/lib/postgresql/data
 
   odoo:
-    image: jobiols/odoo-ent:13.0e
+    image: jobiols/odoo-ent:13.0e-mig
     container_name: odoo
     restart: unless-stopped
     volumes:
