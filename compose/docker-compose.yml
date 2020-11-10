@@ -74,7 +74,7 @@ services:
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
 
-      # Asigno los middlewares de redireccion a los routers  
+      # Asigno los middlewares de redireccion a los routers
       - traefik.http.routers.rou-odoo.middlewares=redirect-to-https@docker
       - traefik.http.routers.rou-chat.middlewares=redirect-to-https@docker
 
@@ -83,7 +83,7 @@ services:
       - traefik.http.routers.rou-odoo-secure.tls=true
       - traefik.http.routers.rou-odoo-secure.tls.certresolver=le
       - traefik.http.routers.rou-odoo-secure.entrypoints=websecure
-      
+
       # Redirecciona rou-odoo-secure al puert 8069 donde escucha odoo
       - traefik.http.routers.rou-odoo-secure.service=srv-odoo-secure
       - traefik.http.services.srv-odoo-secure.loadbalancer.server.port=8069

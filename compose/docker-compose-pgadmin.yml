@@ -1,0 +1,38 @@
+# Compose file odoo lab (makeoverlab) + https
+# Ojo hay que crear el /odoo_ar/traefik/acme.json y ponerle chmod 600
+# Version 2020-08-22
+#################################################################################
+# Netdata visible en puerto :19999
+
+version: '3.5'
+
+services:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    links:
+      - postgres:db
+    container_name: pgadmin4
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=odoo@odoo.com"
+      - "PGADMIN_DEFAULT_PASSWORD=odoo"
+
+  postgres:
+    image: postgres:10.1-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+
+volumes:
+  postgresql:
+  data_dir:
+  netdatalib:
+  netdatacache:
+
