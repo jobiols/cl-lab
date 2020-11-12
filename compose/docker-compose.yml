@@ -58,12 +58,12 @@ services:
       - postgres:db
     labels:
       # router rou-odoo --> Acceso a odoo en puerto 80
-      - traefik.http.routers.rou-odoo.rule=Host(`staging.jeosoft.com.ar`)
+      - traefik.http.routers.rou-odoo.rule=(Host(`staging.jeosoft.com.ar`) || Host(`consulting.quilsoft.com`))
       - traefik.http.routers.rou-odoo.entrypoints=web
       - traefik.http.routers.rou-odoo.service=srv-odoo-secure
 
       # router rou-chat --> Acceso a /longpolling en puerto 80
-      - traefik.http.routers.rou-chat.rule=Host(`staging.jeosoft.com.ar`) && PathPrefix(`/longpolling`)
+      - traefik.http.routers.rou-chat.rule=(Host(`staging.jeosoft.com.ar`) || Host(`consulting.quilsoft.com`)) && PathPrefix(`/longpolling`)
       - traefik.http.routers.rou-chat.entrypoints=web
       - traefik.http.routers.rou-chat.service=srv-chat-secure
 
@@ -79,7 +79,7 @@ services:
       - traefik.http.routers.rou-chat.middlewares=redirect-to-https@docker
 
       # router rou-odoo-secure --> Acceso a odoo en puerto 443
-      - traefik.http.routers.rou-odoo-secure.rule=Host(`staging.jeosoft.com.ar`)
+      - traefik.http.routers.rou-odoo-secure.rule=(Host(`staging.jeosoft.com.ar`) || Host(`consulting.quilsoft.com`))
       - traefik.http.routers.rou-odoo-secure.tls=true
       - traefik.http.routers.rou-odoo-secure.tls.certresolver=le
       - traefik.http.routers.rou-odoo-secure.entrypoints=websecure
@@ -89,7 +89,7 @@ services:
       - traefik.http.services.srv-odoo-secure.loadbalancer.server.port=8069
 
       # Router rou-chat-secure --> Acceso a odoo en puerto 443
-      - traefik.http.routers.rou-chat-secure.rule=(Host(`staging.jeosoft.com.ar`)) && PathPrefix(`/longpolling`)
+      - traefik.http.routers.rou-chat-secure.rule=(Host(`staging.jeosoft.com.ar`) || Host(`consulting.quilsoft.com`)) && PathPrefix(`/longpolling`)
       - traefik.http.routers.rou-chat-secure.tls=true
       - traefik.http.routers.rou-chat-secure.tls.certresolver=le
       - traefik.http.routers.rou-chat-secure.entrypoints=websecure
